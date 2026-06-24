@@ -1,0 +1,3 @@
+function o(f){const r=[];let i=[],t="",n=!1,e=0;for(;e<f.length;){const s=f[e];n?s==='"'?f[e+1]==='"'?(t+='"',e+=2):(n=!1,e++):(t+=s,e++):s==='"'?(n=!0,e++):s===","?(i.push(t.trim()),t="",e++):s===`
+`||s==="\r"?(s==="\r"&&f[e+1]===`
+`&&e++,i.push(t.trim()),t="",i.some(l=>l!=="")&&r.push(i),i=[],e++):(t+=s,e++)}return(t||i.length)&&(i.push(t.trim()),i.some(s=>s!=="")&&r.push(i)),r}async function h(f){const r=await fetch(f);if(!r.ok)throw new Error(`CSV fetch failed: ${r.status}`);const i=await r.text(),t=o(i);if(t.length<2)return[];const n=t[0];return t.slice(1).filter(e=>e.length>=n.length/2).map(e=>Object.fromEntries(n.map((s,l)=>[s,e[l]??""])))}export{h as f};
