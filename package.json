@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "deploy": "npm run build && gh-pages -d build"
+    "deploy": "npm run build && cp build/404.html build/index.html && gh-pages -d build"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.0",
