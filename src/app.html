@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Cátia Barros" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="og:image" content="https://catia.pt/og.png" />
+    <meta name="twitter:image" content="https://catia.pt/og.png" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://catia.pt" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://catia.pt/#person",
+          "name": "Cátia Barros",
+          "url": "https://catia.pt",
+          "jobTitle": "Jornalista de Dados e Interatividade",
+          "worksFor": { "@type": "Organization", "name": "Expresso", "url": "https://expresso.pt" },
+          "sameAs": [
+            "https://www.linkedin.com/in/c%C3%A1tia-barros-8b8247162/",
+            "https://bsky.app/profile/catia.pt",
+            "https://expresso.pt/autores/2022-06-16-catia-barros-8c61cad2"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://catia.pt/#website",
+          "url": "https://catia.pt",
+          "name": "Cátia Barros",
+          "description": "Jornalismo de dados, interativos e newsgames.",
+          "author": { "@id": "https://catia.pt/#person" }
+        }
+      ]
+    }
+    </script>
+    <script data-goatcounter="https://catia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    %sveltekit.head%
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
+</html>
