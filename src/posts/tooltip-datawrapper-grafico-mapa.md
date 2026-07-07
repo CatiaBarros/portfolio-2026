@@ -5,6 +5,7 @@ date: 2026-06-24
 description: "Como usei HTML para meter a evolução da população estrangeira desde 2021 dentro das tooltips de um mapa do Datawrapper."
 description_en: "Using HTML to fit the foreign population's evolution since 2021 inside a Datawrapper map's tooltips."
 tags: jornalismo de dados, Datawrapper, HTML, CSS
+share_image: "https://images.impresa.pt/expresso/2026-06-22-pop_estrangeira_retrato-ff8a0742-1/original"
 ---
 
 Para quem faz jornalismo de dados, visual ou infográfico, as ferramentas que já existem facilitam imenso a vida. Com um ficheiro de Excel limpo ou um CSV, é possível pôr um mapa ou um gráfico no ar em talvez menos de cinco minutos.

@@ -3,6 +3,7 @@ title: "Five years of data inside a tooltip"
 date: 2026-06-24
 description: "How I used HTML to fit the foreign population's evolution since 2021 inside a Datawrapper map's tooltips."
 tags: data journalism, Datawrapper, HTML, CSS
+share_image: "https://images.impresa.pt/expresso/2026-06-22-pop_estrangeira_retrato-ff8a0742-1/original"
 ---
 
 For anyone doing data, visual or infographic journalism, the tools we already have make life much easier. With a clean Excel file or a CSV, you can put a map or a chart online in maybe under five minutes.

@@ -5,13 +5,24 @@
   import Header from '$lib/components/Header.svelte';
   import Footer from '$lib/components/Footer.svelte';
   import { onMount } from 'svelte';
+  import { page } from '$app/stores';
 
   onMount(() => {
     theme.init();
   });
 
   $: if (typeof document !== 'undefined') document.documentElement.lang = $lang;
+
+  // Individual blog posts define their own share image; everything else uses the site default.
+  $: isPost = $page.url.pathname.startsWith('/blog/');
 </script>
+
+<svelte:head>
+  {#if !isPost}
+    <meta property="og:image" content="https://catia.pt/og.png" />
+    <meta name="twitter:image" content="https://catia.pt/og.png" />
+  {/if}
+</svelte:head>
 
 <div data-theme={$theme} class="app">
   <Header />

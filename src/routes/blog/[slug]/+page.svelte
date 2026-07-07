@@ -31,6 +31,12 @@
 
   $: [firstPara, restOfPost] = post?.html ? splitAfterFirstParagraph(post.html) : ['', ''];
 
+  $: shareImage = String(
+    ($lang === 'en' && (post?.share_image_en ?? post?.image_en)) ||
+    post?.share_image || post?.image ||
+    'https://catia.pt/og.png'
+  );
+
   $: postUrl = `https://catia.pt/blog/${slug}`;
   $: shareText = encodeURIComponent(title);
   $: shareUrl  = encodeURIComponent(postUrl);
@@ -45,9 +51,13 @@
     <meta name="description" content={post.description} />
     <meta property="og:description" content={post.description} />
   {/if}
-  <meta property="og:title" content="{title} — Cátia Barros" />
+  <meta property="og:title" content={title} />
+  <meta property="og:site_name" content="Cátia Barros" />
+  <meta name="twitter:title" content={title} />
   <meta property="og:url" content={postUrl} />
   <meta property="og:type" content="article" />
+  <meta property="og:image" content={shareImage} />
+  <meta name="twitter:image" content={shareImage} />
 </svelte:head>
 
 <div class="page section">
