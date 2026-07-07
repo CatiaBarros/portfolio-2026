@@ -1,23 +1,5 @@
 <script lang="ts">
   import { lang } from '../stores/lang';
-
-  let email = '';
-  let status: 'idle' | 'loading' | 'success' | 'error' = 'idle';
-
-  async function subscribe() {
-    if (!email) return;
-    status = 'loading';
-    try {
-      const res = await fetch('https://buttondown.com/api/emails/embed-subscribe/catia', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ email }),
-      });
-      status = res.ok || res.status === 302 ? 'success' : 'error';
-    } catch {
-      status = 'error';
-    }
-  }
 </script>
 
 <aside class="newsletter">
@@ -28,31 +10,28 @@
       : 'Get new articles by email. No spam, just the posts.'}
   </p>
 
-  {#if status === 'success'}
-    <p class="nl-success">
-      {$lang === 'pt' ? 'Subscrito. Obrigada!' : 'Subscribed. Thank you!'}
-    </p>
-  {:else}
-    <form class="nl-form" on:submit|preventDefault={subscribe}>
-      <input
-        type="email"
-        bind:value={email}
-        placeholder={$lang === 'pt' ? 'o teu email' : 'your email'}
-        required
-        class="nl-input mono"
-      />
-      <button type="submit" class="nl-btn" disabled={status === 'loading'}>
-        {status === 'loading'
-          ? '...'
-          : $lang === 'pt' ? 'Subscrever' : 'Subscribe'}
-      </button>
-    </form>
-    {#if status === 'error'}
-      <p class="nl-error">
-        {$lang === 'pt' ? 'Erro. Tenta outra vez.' : 'Something went wrong. Try again.'}
-      </p>
-    {/if}
-  {/if}
+  <form
+    class="nl-form"
+    action="https://buttondown.com/api/emails/embed-subscribe/catia"
+    method="post"
+    target="_blank"
+  >
+    <input
+      type="email"
+      name="email"
+      placeholder={$lang === 'pt' ? 'o teu email' : 'your email'}
+      required
+      class="nl-input mono"
+    />
+    <button type="submit" class="nl-btn">
+      {$lang === 'pt' ? 'Subscrever' : 'Subscribe'}
+    </button>
+  </form>
+  <p class="nl-note">
+    {$lang === 'pt'
+      ? 'Abre uma janela do Buttondown para confirmares a subscrição.'
+      : 'Opens a Buttondown window to confirm your subscription.'}
+  </p>
 </aside>
 
 <style>
@@ -111,8 +90,10 @@
   }
 
   .nl-btn:hover { opacity: 0.85; }
-  .nl-btn:disabled { opacity: 0.5; cursor: default; }
 
-  .nl-success { font-size: 0.9rem; color: var(--green); font-weight: 500; }
-  .nl-error { font-size: 0.85rem; color: #c0392b; margin-top: 0.5rem; }
+  .nl-note {
+    font-size: 0.75rem;
+    color: var(--text-3);
+    margin-top: 0.6rem;
+  }
 </style>
