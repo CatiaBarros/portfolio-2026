@@ -8,7 +8,7 @@ tags: jornalismo de dados, newsgames, gamificação, Svelte
 share_image: "https://catia.pt/posts/amigos-engenheiros-share.png"
 ---
 
-Durante o secundário estudei ciências, uma escolha influenciada por um professor que via em mim uma futura engenheira. Não foram os anos em que mais me senti no meu lugar (não ajudava ser a única rapariga da turma, com a sensação de que tudo me custava mais só por isso, mas esse é assunto para outro dia).
+Durante o secundário estudei ciências, uma escolha influenciada por um professor que via em mim uma futura engenheira. Não foram os anos em que me senti mais confortável (não ajudava ser a única rapariga da turma, com a sensação de que tudo me custava mais só por isso, mas esse é assunto para outro dia).
 
 Guardo boas memórias dessa altura e, sobretudo, um grupo de amigos que ainda hoje aparecem a qualquer hora. Ao contrário de mim, todos eles enveredaram por alguma engenharia e trabalham em informática. Eu fui pelo jornalismo, mas nunca deixei de querer juntar o mundo deles ao meu.
 
