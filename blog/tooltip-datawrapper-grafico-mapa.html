@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Cátia Barros" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://catia.pt" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Person",
+          "@id": "https://catia.pt/#person",
+          "name": "Cátia Barros",
+          "url": "https://catia.pt",
+          "jobTitle": "Jornalista de Dados e Interatividade",
+          "worksFor": { "@type": "Organization", "name": "Expresso", "url": "https://expresso.pt" },
+          "sameAs": [
+            "https://www.linkedin.com/in/c%C3%A1tia-barros-8b8247162/",
+            "https://bsky.app/profile/catia.pt",
+            "https://expresso.pt/autores/2022-06-16-catia-barros-8c61cad2"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://catia.pt/#website",
+          "url": "https://catia.pt",
+          "name": "Cátia Barros",
+          "description": "Jornalismo de dados, interativos e newsgames.",
+          "author": { "@id": "https://catia.pt/#person" }
+        }
+      ]
+    }
+    </script>
+    <script data-goatcounter="https://catia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+    <link href="../_app/immutable/entry/start.DMqRCT4-.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/CwLawluy.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/C-1U-ccA.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/AOrly0L5.js" rel="modulepreload">
+		<link href="../_app/immutable/entry/app.Dr5yz6c5.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/C6ZQdNdy.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/0.B8x-NTI1.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Bp08Sk9h.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/Bl0WXIQi.js" rel="modulepreload">
+		<link href="../_app/immutable/nodes/5.ChERDHAQ.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/BI8loLDL.js" rel="modulepreload">
+		<link href="../_app/immutable/chunks/CQURnV1m.js" rel="modulepreload">
+		<title>Cinco anos de dados dentro de uma tooltip — Cátia Barros</title><!-- HEAD_svelte-suyjcq_START --><!-- HEAD_svelte-suyjcq_END --><!-- HEAD_svelte-1a47887_START --><meta name="description" content="Como usei HTML para meter a evolução da população estrangeira desde 2021 dentro das tooltips de um mapa do Datawrapper."> <meta property="og:description" content="Como usei HTML para meter a evolução da população estrangeira desde 2021 dentro das tooltips de um mapa do Datawrapper."><meta property="og:title" content="Cinco anos de dados dentro de uma tooltip"><meta property="og:site_name" content="Cátia Barros"><meta name="twitter:title" content="Cinco anos de dados dentro de uma tooltip"><meta property="og:url" content="https://catia.pt/blog/tooltip-datawrapper-grafico-mapa"><meta property="og:type" content="article"><meta property="og:image" content="https://images.impresa.pt/expresso/2026-06-22-pop_estrangeira_retrato-ff8a0742-1/original"><meta name="twitter:image" content="https://images.impresa.pt/expresso/2026-06-22-pop_estrangeira_retrato-ff8a0742-1/original"><!-- HEAD_svelte-1a47887_END -->
+		<link href="../_app/immutable/assets/0.CH4Om5t-.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/Newsletter.4K1nTkwz.css" rel="stylesheet">
+		<link href="../_app/immutable/assets/5.CgxfjTv3.css" rel="stylesheet">
+  </head>
+  <body data-sveltekit-preload-data="hover">
+    <div style="display: contents">   <div data-theme="light" class="app svelte-5yy3sc"><header class="header svelte-61owge"><div class="container inner svelte-61owge"><a href="/" class="logo svelte-61owge" data-svelte-h="svelte-x6uggz">Cátia Barros</a> <nav class="nav svelte-61owge" aria-label="Navegação principal"><a href="/works" class="svelte-61owge">Trabalhos</a> <a href="/academic" class="svelte-61owge">Academia</a> <a href="/cv" class="svelte-61owge">CV</a> <a href="/blog" class="svelte-61owge active">Blog</a></nav> <div class="controls svelte-61owge"><button class="ctrl mono svelte-61owge" aria-label="Mudar idioma">EN</button> <span class="divider svelte-61owge" aria-hidden="true" data-svelte-h="svelte-huc7ji">/</span> <button class="ctrl svelte-61owge" aria-label="Modo escuro"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button> <button class="hamburger svelte-61owge" aria-label="Menu" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><line x1="3" y1="8" x2="21" y2="8"></line><line x1="3" y1="16" x2="21" y2="16"></line></svg></button></div></div>  </header> <main id="main-content" class="svelte-5yy3sc"> <div class="page section"><div class="container"><a href="/blog" class="back svelte-e701a4">← Voltar</a> <div class="post-layout svelte-e701a4"><article class="post svelte-e701a4"><header class="post-header svelte-e701a4"><time class="post-date mono svelte-e701a4" datetime="2026-06-24">24 de junho de 2026</time> <h1 class="post-title svelte-e701a4">Cinco anos de dados dentro de uma tooltip</h1> <div class="post-tags svelte-e701a4"><span class="tag">jornalismo de dados</span><span class="tag">Datawrapper</span><span class="tag">HTML</span><span class="tag">CSS</span></div></header> <div class="post-body svelte-e701a4"><!-- HTML_TAG_START --><p>Para quem faz jornalismo de dados, visual ou infográfico, as ferramentas que já existem facilitam imenso a vida. Com um ficheiro de Excel limpo ou um CSV, é possível pôr um mapa ou um gráfico no ar em talvez menos de cinco minutos.</p><!-- HTML_TAG_END --> <div class="share-inline svelte-e701a4"><span class="share-label mono svelte-e701a4">Partilhar</span> <div class="share-links svelte-e701a4"><a href="https://bsky.app/intent/compose?text=Cinco%20anos%20de%20dados%20dentro%20de%20uma%20tooltip%20https%3A%2F%2Fcatia.pt%2Fblog%2Ftooltip-datawrapper-grafico-mapa" target="_blank" rel="noopener noreferrer" aria-label="Partilhar no Bluesky" title="Bluesky" class="svelte-e701a4"><svg width="18" height="18" viewBox="0 0 568 501" fill="currentColor" aria-hidden="true"><path d="M123.121 33.664C188.241 82.553 258.281 181.68 284 234.873c25.719-53.192 95.759-152.32 160.879-201.209C491.866-1.611 568-28.906 568 57.947c0 17.346-9.945 145.713-15.778 166.555-20.275 72.453-94.155 90.933-159.875 79.748C507.222 323.8 536.444 388.56 473.333 453.32c-119.86 122.992-172.272-30.853-185.702-70.329-2.479-7.225-3.641-10.587-3.631-7.725.01 2.862-1.152 6.224-3.631 7.725C266.939 422.467 214.527 576.312 94.667 453.32 31.556 388.56 60.778 323.8 175.653 304.25c-65.72 11.185-139.6-7.295-159.875-79.748C9.945 203.66 0 75.293 0 57.947c0-86.853 76.134-59.558 123.121-24.283z"></path></svg></a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcatia.pt%2Fblog%2Ftooltip-datawrapper-grafico-mapa" target="_blank" rel="noopener noreferrer" aria-label="Partilhar no LinkedIn" title="LinkedIn" class="svelte-e701a4"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"></path></svg></a> <a href="https://x.com/intent/tweet?text=Cinco%20anos%20de%20dados%20dentro%20de%20uma%20tooltip&amp;url=https%3A%2F%2Fcatia.pt%2Fblog%2Ftooltip-datawrapper-grafico-mapa" target="_blank" rel="noopener noreferrer" aria-label="Partilhar no X" title="X" class="svelte-e701a4"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path></svg></a> <a href="https://wa.me/?text=Cinco%20anos%20de%20dados%20dentro%20de%20uma%20tooltip%20https%3A%2F%2Fcatia.pt%2Fblog%2Ftooltip-datawrapper-grafico-mapa" target="_blank" rel="noopener noreferrer" aria-label="Partilhar no WhatsApp" title="WhatsApp" class="svelte-e701a4"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"></path></svg></a> </div></div> <!-- HTML_TAG_START -->
+<p>O reverso é que personalizar dá trabalho. Com dados públicos, é natural que vários jornais cheguem a mapas parecidos: partem do mesmo ficheiro e as ferramentas, por defeito, levam a resultados semelhantes. Não tem nada de mal. Mas, neste caso, apeteceu-me ir um pouco mais além.</p>
+<p>Esta segunda-feira, o INE voltou a publicar as estimativas da população. Tinha suspendido as publicações sobre imigração e população estrangeira para validar os <a href="https://expresso.pt/sociedade/2025-10-16-aima-reve-em-baixa-numero-de-estrangeiros-a-viver-em-portugal-sao-1.543.697-50d4eb45" target="_blank" rel="noopener noreferrer">dados da AIMA</a>, e foi assim que se chegou ao que no Expresso chamámos de <a href="https://expresso.pt/sociedade/2025-12-18-estado-nao-sabe-quantos-sao-e-onde-vivem-os-imigrantes-ine-suspende-estatisticas-e-admite-reavaliar-numeros-b0f222c3" target="_blank" rel="noopener noreferrer">‘vazio estatístico’</a>: em dezembro de 2025, o Estado não sabia ao certo quantos eram nem onde viviam os imigrantes.</p>
+<p>A revisão do INE não foi só de 2025. O Instituto reviu também os números de 2021 a 2024 e, no caso da população estrangeira, publicou 2024 pela primeira vez. As correções foram grandes, e vieram quase todas da população estrangeira, que estava subavaliada. Para dar uma ideia: o total de residentes em 2024 subiu de 10,7 para 11,4 milhões, e o número de estrangeiros em 2023 passou de cerca de 1,05 para 1,35 milhões. Em 2025, a população residente chegou aos 11.424.031, o valor mais alto de que há registo, com mais de 800 mil pessoas do que em 2021, quase tudo por via da imigração.</p>
+<p>Os números do INE são, ainda assim, de natureza diferente dos da AIMA. São uma estimativa de residentes, que cruza registos fiscais, da segurança social e escolares para apurar onde as pessoas vivem, e não uma contagem de títulos de residência.</p>
+<p>Com tantos números novos, e com aquilo que o jornalismo de dados permite, deixar o leitor ver os dados onde quer, sabia que valia a pena fazer o retrato: quem são, onde vivem e de onde vêm os imigrantes em Portugal.</p>
+<p>Mas havia um problema. Os dados iam de 2021 a 2025, e um coroplético mostra um número só, o de 2025. Sentia que anos e anos de informação iam ficar esquecidos, escondidos atrás de uma cor única.</p>
+<p>E a web tem uma vantagem rara: deixa mexer por baixo do que está à vista. Foi o que fiz, uma versão do mapa onde, ao passar o cursor por um concelho, aparece a evolução desde 2021.</p>
+<p><img src="https://images.impresa.pt/expresso/2026-06-22-pop_estrangeira_retrato-ff8a0742-1/original" alt="Mapa da população estrangeira por concelho, com a tooltip do concelho de Odemira aberta a mostrar a evolução desde 2021"></p>
+<p>O Datawrapper é claro na documentação sobre isto: explica como <a href="https://www.datawrapper.de/academy/i-want-to-change-how-my-data-appears-in-tooltips" target="_blank" rel="noopener noreferrer">mudar a forma como os dados aparecem nas tooltips</a> e até como <a href="https://www.datawrapper.de/academy/how-to-embed-charts-into-tooltips" target="_blank" rel="noopener noreferrer">embeber gráficos dentro delas</a>. Era exatamente o que eu queria. Com HTML, consegui condensar os cinco anos numa tooltip: de um lado, os números absolutos de 2021 e 2025; do outro, um pequeno gráfico de barras com a percentagem de estrangeiros no total de residentes, ano a ano.</p>
+<p>Impus duas regras. A escala do gráfico tinha de ser igual em todos os concelhos, para que as barras fossem comparáveis de tooltip para tooltip. E a cor de cada barra tinha de coincidir com a legenda do mapa, em vez de uma cor única, para que a barra de cada ano dissesse a mesma coisa que o concelho pintado.</p>
+<p>As percentagens, a altura de cada barra e a cor de cada ano foram calculadas antes e juntas ao ficheiro como colunas. Na tooltip, é só encaixá-las no sítio, através de placeholders:</p>
+<pre><code class="hljs language-html">{{ UPPER(nome) }} <span class="hljs-tag">&lt;<span class="hljs-name">hr</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-family:inherit;width:max-content;max-width:340px;padding:0px 0px&quot;</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:11px;color:#888;margin:2px 0 2px&quot;</span>&gt;</span>População estrangeira<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:flex;gap:4px;align-items:flex-start&quot;</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;flex:0 0 auto&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:11px;color:#888;line-height:1.1&quot;</span>&gt;</span>em 2021<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:13px;color:#888;margin-bottom:8px&quot;</span>&gt;</span>{{ FORMAT(valor_2021, &quot;0,0&quot;) }}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:11px;color:#015782;line-height:1.1&quot;</span>&gt;</span>em 2025<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:22px;font-weight:bold;color:#015782;line-height:1.1&quot;</span>&gt;</span>{{ FORMAT(valor_2025, &quot;0,0&quot;) }}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+   <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;flex:0 0 auto;border-left:1px solid #e5e5e5;padding-left:6px&quot;</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:10px;color:#888;margin-bottom:6px;white-space:nowrap&quot;</span>&gt;</span>% do total de residentes<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:flex;align-items:flex-end;gap:6px&quot;</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:flex;flex-direction:column;align-items:center;width:18px&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:9px;color:#888;line-height:1;margin-bottom:2px&quot;</span>&gt;</span>{{ FORMAT(percentagem_2021, &quot;0%&quot;) }}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width:12px;height:64px;background:#eef1f3;display:flex;align-items:flex-end&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width:100%;height:{{ altura_2021 }}px;background:{{ cor_2021 }}&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:9px;color:#888;margin-top:3px&quot;</span>&gt;</span>&#x27;21<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+        <span class="hljs-comment">&lt;!-- &#x27;22, &#x27;23, &#x27;24 seguem o mesmo padrão --&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;display:flex;flex-direction:column;align-items:center;width:18px&quot;</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:9px;font-weight:bold;color:#015782;line-height:1;margin-bottom:2px&quot;</span>&gt;</span>{{ FORMAT(percentagem_2025, &quot;0%&quot;) }}<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width:12px;height:64px;background:#eef1f3;display:flex;align-items:flex-end&quot;</span>&gt;</span>
+            <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;width:100%;height:{{ altura_2025 }}px;background:{{ cor_2025 }}&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+          <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">style</span>=<span class="hljs-string">&quot;font-size:9px;color:#015782;font-weight:bold;margin-top:3px&quot;</span>&gt;</span>&#x27;25<span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></code></pre><p>A barra é o truque: um carril cinzento de altura fixa, 64px, e lá dentro um segundo elemento cuja altura e cor vêm do ficheiro. Encostado ao fundo, cresce de baixo para cima, como uma barra deve crescer.</p>
+<p>Em Odemira, o concelho com maior peso de população estrangeira do país, a tooltip mostra 14 794 estrangeiros em 2021 e 22 930 em 2025, com a série de percentagens em 41%, 48%, 52%, 53% e 52%. Reparem que 2024 (53%) está acima de 2025 (52%). Não é uma subida limpa até ao fim, e era isso que eu queria mostrar: a trajetória, e não uma seta a apontar para cima.</p>
+<p>No fim, por baixo, continua a ser o mesmo coroplético. O que muda é o que o leitor encontra quando se aproxima: cinco anos de história onde, por defeito, só apareceria um número. Foi isso que quis acrescentar.</p>
+<p>Podes ler o artigo e explorar os dados <a href="https://expresso.pt/migracoes/2026-06-22-fim-do-vazio-estatistico-quem-sao-onde-vivem-e-de-onde-vem-os-imigrantes-em-portugal-7fe2b024" target="_blank" rel="noopener noreferrer">aqui</a>.</p>
+<!-- HTML_TAG_END --></div> <div class="nl-mobile svelte-e701a4"><aside class="newsletter svelte-4ivi6x"><p class="nl-label mono svelte-4ivi6x">Newsletter</p> <p class="nl-desc svelte-4ivi6x">Recebe os novos artigos por email. Sem spam, só os posts.</p> <form class="nl-form svelte-4ivi6x"><input type="email" placeholder="o teu email" required class="nl-input mono svelte-4ivi6x" value=""> <button type="submit" class="nl-btn svelte-4ivi6x" >Subscrever</button></form>  </aside></div> <aside class="post-contact svelte-e701a4"><p class="contact-prompt svelte-e701a4">Tens alguma reação a este post? Fala comigo.</p> <div class="contact-links svelte-e701a4" data-svelte-h="svelte-8pgh2l"><a href="mailto:catia.s.g.barros@gmail.com" class="svelte-e701a4">catia.s.g.barros@gmail.com</a> <a href="https://bsky.app/profile/catia.pt" target="_blank" rel="noopener noreferrer" class="svelte-e701a4">Bluesky</a> <a href="https://linkedin.com/in/cátia-barros-8b8247162" target="_blank" rel="noopener noreferrer" class="svelte-e701a4">LinkedIn</a></div></aside></article> <aside class="post-sidebar svelte-e701a4"><div class="sidebar-sticky svelte-e701a4"><aside class="newsletter svelte-4ivi6x"><p class="nl-label mono svelte-4ivi6x">Newsletter</p> <p class="nl-desc svelte-4ivi6x">Recebe os novos artigos por email. Sem spam, só os posts.</p> <form class="nl-form svelte-4ivi6x"><input type="email" placeholder="o teu email" required class="nl-input mono svelte-4ivi6x" value=""> <button type="submit" class="nl-btn svelte-4ivi6x" >Subscrever</button></form>  </aside></div></aside></div></div> </div></main> <footer class="footer svelte-23h6uh"><div class="container inner svelte-23h6uh"><div class="col col-brand svelte-23h6uh"><p class="brand svelte-23h6uh" data-svelte-h="svelte-pfv6gh">Cátia Barros</p> <a class="role mono svelte-23h6uh" href="https://expresso.pt/autores/2022-06-16-catia-barros-8c61cad2" target="_blank" rel="noopener noreferrer">Jornalista de Dados e Interatividade · Expresso</a></div> <nav class="col col-nav svelte-23h6uh" aria-label="Mapa do site"><p class="col-label mono svelte-23h6uh">Páginas</p> <a href="/" class="svelte-23h6uh">Início</a> <a href="/works" class="svelte-23h6uh">Trabalhos</a> <a href="/academic" class="svelte-23h6uh">Academia</a> <a href="/cv" class="svelte-23h6uh">CV</a> <a href="/blog" class="svelte-23h6uh">Blog</a></nav> <div class="col col-contact svelte-23h6uh"><p class="col-label mono svelte-23h6uh">Contacto</p> <a href="mailto:cbarros@expresso.impresa.pt" class="svelte-23h6uh" data-svelte-h="svelte-180pvji">cbarros@expresso.impresa.pt</a> <a href="mailto:catia.s.g.barros@gmail.com" class="svelte-23h6uh" data-svelte-h="svelte-a7bera">catia.s.g.barros@gmail.com</a> <a href="https://linkedin.com/in/cátia-barros-8b8247162" target="_blank" rel="noopener noreferrer" class="svelte-23h6uh" data-svelte-h="svelte-dp9hz1">LinkedIn</a> <a href="https://bsky.app/profile/catia.pt" target="_blank" rel="noopener noreferrer" class="svelte-23h6uh" data-svelte-h="svelte-1gjy860">Bluesky</a></div></div> </footer> </div> 
+			
+			<script>
+				{
+					__sveltekit_mfcmz5 = {
+						base: new URL("..", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("../_app/immutable/entry/start.DMqRCT4-.js"),
+						import("../_app/immutable/entry/app.Dr5yz6c5.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 5],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+  </body>
+</html>
