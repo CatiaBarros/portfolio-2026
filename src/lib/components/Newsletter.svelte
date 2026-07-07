@@ -23,6 +23,7 @@
       required
       class="nl-input mono"
     />
+    <input type="hidden" name="metadata__language" value={$lang} />
     <button type="submit" class="nl-btn">
       {$lang === 'pt' ? 'Subscrever' : 'Subscribe'}
     </button>

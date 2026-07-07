@@ -18,7 +18,8 @@
 </script>
 
 <svelte:head>
-  <link rel="alternate" type="application/rss+xml" title="Cátia Barros — Blog" href="https://catia.pt/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title="Cátia Barros — Blog (PT)" href="https://catia.pt/rss.xml" hreflang="pt" />
+  <link rel="alternate" type="application/rss+xml" title="Cátia Barros — Blog (EN)" href="https://catia.pt/rss.en.xml" hreflang="en" />
   {#if !isPost}
     <meta property="og:image" content="https://catia.pt/og.png" />
     <meta name="twitter:image" content="https://catia.pt/og.png" />
