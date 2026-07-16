@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>As notícias podem ser jogos · Material de apoio</title>
+<meta name="description" content="As notícias podem ser jogos. Material de apoio sobre newsgames e jornalismo de dados.">
+<meta property="og:title" content="As notícias podem ser jogos.">
+<meta property="og:description" content="Material de apoio sobre newsgames e jornalismo de dados.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="robots" content="noindex, nofollow">
+
+<script>
+/* Resolve o tema antes de pintar, para não haver flash. */
+(function(){try{
+  var t=localStorage.getItem('tema-esv');
+  if(t!=='claro'&&t!=='escuro')t=matchMedia('(prefers-color-scheme:dark)').matches?'escuro':'claro';
+  document.documentElement.setAttribute('data-tema',t);
+}catch(e){}})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  /* Fundo branco. Duas cores da paleta: o salmão marca, o castanho liga.
+     Cada uma só passa contraste no seu papel. */
+  --papel:#FFFFFF;
+  --tinta:#0D0D0D;    /* preto do balão do cartaz — 19.4:1 */
+  --marcador:rgba(226,129,121,.45); /* salmão do cartaz, esbatido a 45% */
+  --caneta:#743737;   /* castanho do cartaz — links, 9:1 sobre branco */
+  --sombra:#6B6B6B;
+  --linha:#DCDCDC;
+
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --corpo:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+
+/* Tema escuro: mesmo salmão e castanho, aclarados para lerem sobre fundo escuro. */
+@media (prefers-color-scheme:dark){
+  :root:not([data-tema="claro"]){
+    --papel:#151515;
+    --tinta:#ECECEC;
+    --marcador:rgba(226,129,121,.42);
+    --caneta:#E4A39B;
+    --sombra:#9C9C9C;
+    --linha:#333333;
+  }
+}
+:root[data-tema="escuro"]{
+  --papel:#151515;
+  --tinta:#ECECEC;
+  --marcador:rgba(226,129,121,.42);
+  --caneta:#E4A39B;
+  --sombra:#9C9C9C;
+  --linha:#333333;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--papel);
+  color:var(--tinta);
+  font-family:var(--corpo);
+  font-size:18px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* progresso — mobile (barras clicáveis, âncora por secção) */
+.progresso{
+  position:fixed;
+  inset:0 0 auto 0;
+  z-index:20;
+  display:flex;
+  gap:3px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 12px 0;
+  background:linear-gradient(var(--papel) 60%,transparent);
+}
+.progresso a{flex:1;padding:0 0 11px;-webkit-tap-highlight-color:transparent}
+.progresso i{display:block;height:3px;background:var(--linha)}
+.progresso a.passou i{background:var(--sombra)}
+.progresso a.aqui i{background:var(--tinta);height:5px;margin-top:-1px}
+
+/* controlos flutuantes — tema (sempre) e menu (só mobile) */
+.controlos{
+  position:fixed;
+  z-index:30;
+  right:16px;
+  bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  display:flex;
+  gap:10px;
+}
+.controlos button{
+  width:46px;height:46px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--papel);
+  border:1px solid var(--linha);
+  border-radius:50%;
+  color:var(--tinta);
+  cursor:pointer;
+  box-shadow:0 2px 14px rgba(0,0,0,.12);
+  -webkit-tap-highlight-color:transparent;
+}
+.controlos button:hover{border-color:var(--sombra)}
+.controlos svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.menu-btn .hb{display:flex;flex-direction:column;gap:4px;width:20px}
+.menu-btn .hb i{display:block;height:2px;background:currentColor;border-radius:2px;transition:.25s}
+.menu-btn[aria-expanded="true"] .barra1{transform:translateY(6px) rotate(45deg)}
+.menu-btn[aria-expanded="true"] .barra2{opacity:0}
+.menu-btn[aria-expanded="true"] .barra3{transform:translateY(-6px) rotate(-45deg)}
+
+.i-sol{display:none}
+:root[data-tema="escuro"] .i-lua{display:none}
+:root[data-tema="escuro"] .i-sol{display:block}
+
+/* menu mobile — sobreposição de ecrã inteiro */
+.menu-mobile{
+  position:fixed;
+  inset:0;
+  z-index:28;
+  background:var(--papel);
+  padding:64px 26px calc(96px + env(safe-area-inset-bottom,0px));
+  overflow-y:auto;
+  animation:menu-entra .28s cubic-bezier(.2,.75,.3,1);
+}
+.menu-mobile[hidden]{display:none}
+@keyframes menu-entra{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.menu-mobile .marca{font-family:var(--display);font-weight:800;font-size:1.4rem;letter-spacing:-.02em;line-height:1.05}
+.menu-mobile .sub{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sombra);margin-top:8px}
+.menu-mobile ol{list-style:none;margin-top:30px}
+.menu-mobile a{
+  display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:baseline;
+  padding:15px 0;
+  border-top:1px solid var(--linha);
+  text-decoration:none;color:var(--tinta);
+  font-family:var(--display);font-weight:700;font-size:1.25rem;letter-spacing:-.01em;
+}
+.menu-mobile li:last-child a{border-bottom:1px solid var(--linha)}
+.menu-mobile a span{font-family:var(--mono);font-size:12px;font-weight:400;color:var(--sombra)}
+.menu-mobile a[aria-current="true"] span{color:var(--caneta)}
+
+/* índice — desktop */
+.rail{display:none}
+
+.palco{
+  scroll-snap-type:y proximity;
+  height:100dvh;
+  overflow-y:scroll;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+}
+.cartao{
+  scroll-snap-align:start;
+  min-height:100dvh;
+  padding:76px 24px calc(92px + env(safe-area-inset-bottom,0px));
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:18px;
+}
+
+/* tipos */
+.sobrancelha{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--sombra);
+}
+.sobrancelha b{color:var(--caneta);font-weight:700}
+
+h1,h2{
+  font-family:var(--display);
+  font-weight:800;
+  line-height:1.03;
+  letter-spacing:-.02em;
+  font-size:clamp(1.9rem,7.6vw,2.7rem);
+  text-wrap:balance;
+}
+
+p{max-width:36em}
+.lede{font-size:1.15rem}
+.miudo{font-size:.95rem;color:var(--sombra)}
+
+.mark{
+  background-image:linear-gradient(var(--marcador),var(--marcador));
+  background-repeat:no-repeat;
+  background-position:0 86%;
+  background-size:0% 44%;
+  transition:background-size .55s cubic-bezier(.2,.75,.3,1) .15s;
+  padding:0 .06em;
+  margin:0 -.06em;
+}
+.aberto .mark{background-size:100% 44%}
+
+.folha{
+  font-family:var(--mono);
+  font-size:11px;
+  line-height:1.9;
+  color:var(--sombra);
+  border-block:1px solid var(--linha);
+  padding:8px 0;
+  white-space:pre;
+  overflow-x:auto;
+}
+.folha b{color:var(--tinta);font-weight:700}
+
+/* lista */
+.lista > div{border-top:1px solid var(--linha);padding:11px 0}
+.lista > div:last-child{border-bottom:1px solid var(--linha)}
+.lista dt{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:1.1rem;
+  letter-spacing:-.01em;
+}
+.lista dd{font-size:.95rem;color:var(--sombra);line-height:1.45;margin-top:2px}
+.lista dd a,.corrido a{color:var(--caneta);text-decoration:none;border-bottom:1px solid var(--linha)}
+.lista dd a:hover,.lista dd a:focus-visible,
+.corrido a:hover,.corrido a:focus-visible{background:var(--marcador);color:var(--tinta)}
+
+/* citação */
+.citacao{
+  font-style:italic;
+  font-size:1.2rem;
+  line-height:1.35;
+  border-left:3px solid var(--tinta);
+  padding-left:16px;
+  max-width:24em;
+}
+.citacao cite{
+  display:block;
+  font-family:var(--mono);
+  font-style:normal;
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--sombra);
+  margin-top:8px;
+}
+
+/* links */
+.saida{
+  display:block;
+  border-top:1px solid var(--linha);
+  padding:13px 0;
+  text-decoration:none;
+  color:inherit;
+}
+.saida:last-of-type{border-bottom:1px solid var(--linha)}
+.saida .gancho{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:1rem;
+  display:block;
+  margin-bottom:3px;
+}
+.saida .url{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--caneta);
+  word-break:break-all;
+}
+.saida .nota{display:block;font-size:.9rem;color:var(--sombra);margin-top:2px}
+.saida:hover .url,.saida:focus-visible .url{background:var(--marcador);color:var(--tinta)}
+
+.pergunta{
+  font-family:var(--display);
+  font-weight:400;
+  font-size:clamp(1.2rem,4.8vw,1.45rem);
+  line-height:1.25;
+  border-left:3px solid var(--tinta);
+  padding-left:16px;
+  max-width:22em;
+}
+.despedida{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(1.4rem,5.4vw,1.7rem);
+  letter-spacing:-.02em;
+}
+.convite{font-size:1.08rem;max-width:32em}
+.convite a{color:var(--caneta);text-decoration:none;border-bottom:1px solid var(--caneta)}
+.convite a:hover,.convite a:focus-visible{background:var(--marcador);color:var(--tinta)}
+.creditos{
+  font-family:var(--mono);
+  font-size:11px;
+  line-height:1.9;
+  color:var(--sombra);
+  border-top:1px solid var(--linha);
+  padding-top:14px;
+}
+.creditos a{color:var(--caneta);text-decoration:none}
+.creditos a:hover{background:var(--marcador);color:var(--tinta)}
+
+.dica{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--sombra);
+}
+.dica span{display:inline-block;animation:desce 1.9s ease-in-out infinite}
+@keyframes desce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+
+a:focus-visible,.saida:focus-visible{outline:2px solid var(--caneta);outline-offset:3px}
+
+/* desktop */
+@media (min-width:900px){
+  .progresso{display:none}
+  body{display:grid;grid-template-columns:290px 1fr}
+
+  .rail{
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+    position:sticky;
+    top:0;
+    height:100dvh;
+    padding:48px 32px;
+    border-right:1px solid var(--linha);
+  }
+  .rail .marca{
+    font-family:var(--display);
+    font-weight:800;
+    font-size:1.5rem;
+    letter-spacing:-.02em;
+    line-height:1;
+  }
+  .rail .sub{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--sombra);
+    margin-top:8px;
+  }
+  .rail ol{list-style:none;display:flex;flex-direction:column;gap:1px}
+  .rail a{
+    display:grid;
+    grid-template-columns:24px 1fr;
+    gap:8px;
+    padding:7px 0;
+    text-decoration:none;
+    color:var(--sombra);
+    font-family:var(--mono);
+    font-size:11.5px;
+    border-top:1px solid var(--linha);
+  }
+  .rail li:last-child a{border-bottom:1px solid var(--linha)}
+  .rail a:hover{color:var(--tinta)}
+  .rail a[aria-current="true"]{color:var(--tinta);font-weight:700}
+  .rail a[aria-current="true"] em{
+    font-style:normal;
+    background:var(--marcador);
+    padding:0 3px;
+    margin:0 -3px;
+  }
+  .rail .pe{margin-top:auto;font-family:var(--mono);font-size:10.5px;color:var(--sombra);line-height:1.8}
+  .rail .pe a{display:inline;grid-template-columns:none;padding:0;border:0;color:var(--caneta);word-break:break-all}
+  .rail .pe a:hover{background:var(--marcador);color:var(--tinta)}
+
+  .palco{scroll-snap-type:none;padding:0 56px}
+  .cartao{
+    min-height:0;
+    scroll-snap-align:none;
+    padding:64px 0;
+    max-width:660px;
+    border-bottom:1px solid var(--linha);
+    justify-content:flex-start;
+  }
+  .cartao:first-child{min-height:100dvh;justify-content:center;padding-top:0}
+  .cartao:last-child{border-bottom:0;padding-bottom:110px}
+  h1,h2{font-size:clamp(2.1rem,2.9vw,2.9rem)}
+  .dica{display:none}
+  .controlos .menu-btn{display:none}
+  .menu-mobile{display:none !important}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important}
+  .palco{scroll-behavior:auto}
+  .mark{background-size:100% 44%}
+}
+</style>
+</head>
+<body>
+
+<nav class="progresso" aria-label="Ir para secção"></nav>
+
+<div class="controlos">
+  <button class="menu-btn" type="button" aria-label="Abrir índice" aria-expanded="false" aria-controls="menu-mobile">
+    <span class="hb"><i class="barra1"></i><i class="barra2"></i><i class="barra3"></i></span>
+  </button>
+  <button class="tema" type="button" aria-label="Mudar para tema escuro">
+    <svg class="i-lua" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+    <svg class="i-sol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</div>
+
+<nav class="menu-mobile" id="menu-mobile" aria-label="Índice" hidden>
+  <div class="marca">Material de apoio</div>
+  <div class="sub">Newsgames</div>
+  <ol>
+    <li><a href="#c0"><span>00</span>Começar</a></li>
+    <li><a href="#c1"><span>01</span>O que é</a></li>
+    <li><a href="#c2"><span>02</span>Nem tudo é um jogo</a></li>
+    <li><a href="#c3"><span>03</span>E uma folha de Excel?</a></li>
+    <li><a href="#c4"><span>04</span>Personalização</a></li>
+    <li><a href="#c5"><span>05</span>Confiar nos números</a></li>
+    <li><a href="#c6"><span>06</span>Porquê</a></li>
+    <li><a href="#c7"><span>07</span>Faz um</a></li>
+  </ol>
+</nav>
+
+<nav class="rail" aria-label="Índice">
+  <div class="cabeca">
+    <div class="marca">Material<br>de apoio</div>
+    <div class="sub">Newsgames</div>
+  </div>
+  <ol>
+    <li><a href="#c0"><span>00</span><em>Começar</em></a></li>
+    <li><a href="#c1"><span>01</span><em>O que é</em></a></li>
+    <li><a href="#c2"><span>02</span><em>Nem tudo é um jogo</em></a></li>
+    <li><a href="#c3"><span>03</span><em>E uma folha de Excel?</em></a></li>
+    <li><a href="#c4"><span>04</span><em>Personalização</em></a></li>
+    <li><a href="#c5"><span>05</span><em>Confiar nos números</em></a></li>
+    <li><a href="#c6"><span>06</span><em>Porquê</em></a></li>
+    <li><a href="#c7"><span>07</span><em>Faz um</em></a></li>
+  </ol>
+  <div class="pe"><a href="https://catia.pt" target="_blank" rel="noopener">catia.pt</a> | <a href="mailto:cbarros@expresso.impresa.pt">cbarros@expresso.impresa.pt</a> e <a href="mailto:catia.s.g.barros@gmail.com">catia.s.g.barros@gmail.com</a></div>
+</nav>
+
+<main class="palco">
+
+  <section class="cartao" id="c0">
+    <div class="sobrancelha">Material de apoio · Newsgames · 2026</div>
+    <div class="folha">COD   CONCELHO      ANO    VALOR
+0105  Aveiro        2025    1874
+0301  Braga         2025    2210
+<b>1111  Sintra        2025    3902</b>
+1312  Porto         2025    2996
+...   ...           ...     ...</div>
+    <h1>As notícias podem ser <span class="mark">jogos</span>.</h1>
+    <p class="lede">Especialmente quando há histórias e números.</p>
+    <div class="dica"><span>↓</span> Desliza</div>
+  </section>
+
+  <section class="cartao" id="c1">
+    <div class="sobrancelha">01 <b>/</b> Definição</div>
+    <h2>O que é um newsgame?</h2>
+    <p>É um videojogo que usa acontecimentos reais na narrativa e nas mecânicas. Ou, ao contrário: uma peça de jornalismo que usa <span class="mark">desafios, regras, objetivos, escolhas e feedback</span> para te contar uma coisa.</p>
+    <p>Alguma vez imaginaste o que é ser motorista da Uber? Ou quanto é que precisas para seres estudante universitário?</p>
+    <a class="saida" href="https://ig.ft.com/uber-game/" target="_blank" rel="noopener">
+      <span class="gancho">Uma semana a conduzir para a Uber</span>
+      <span class="url">ig.ft.com/uber-game</span>
+      <span class="nota">Financial Times · inglês</span>
+    </a>
+    <a class="saida" href="https://multimedia.expresso.pt/ensinosuperiorjogo2025/" target="_blank" rel="noopener">
+      <span class="gancho">Joga e descobre quanto te vai custar a vida no ensino superior</span>
+      <span class="url">multimedia.expresso.pt/ensinosuperiorjogo2025</span>
+      <span class="nota">Expresso · com os preços de casa reais de cada cidade</span>
+    </a>
+  </section>
+
+  <section class="cartao" id="c2">
+    <div class="sobrancelha">02 <b>/</b> Níveis</div>
+    <h2>Mas nem tudo é um jogo.</h2>
+    <p>Tudo pode é ter por base o <span class="mark">mecanismo</span> de um. Não precisa de ser grande, nem de ter uma narrativa longa. Há muitas formas de tornar as notícias interativas, e todas elas têm elementos de jogo.</p>
+
+    <dl class="lista">
+      <div>
+        <dt>Um quiz</dt>
+        <dd>O que era proibido em Portugal antes do 25 de Abril? <a href="https://www.publico.pt/P3/interactivo/sabes-era-proibido-antes-25-abril-testa-aqui-152" target="_blank" rel="noopener">Jogar</a> · P3</dd>
+      </div>
+      <div>
+        <dt>Uma timeline? Um quiz? Um jogo?</dt>
+        <dd>Talvez tudo num só, sobre a independência dos Estados Unidos. <a href="https://multimedia.expresso.pt/independenciaeua/" target="_blank" rel="noopener">Jogar</a> · Expresso</dd>
+      </div>
+      <div>
+        <dt>Desenha tu os números</dt>
+        <dd>Achas que sabes como é Portugal? Traça a linha e vê onde te enganaste. <a href="https://multimedia.expresso.pt/retratoportugal2025/" target="_blank" rel="noopener">Jogar</a> · Expresso</dd>
+      </div>
+      <div>
+        <dt>Sátira política?</dt>
+        <dd>Sim, até os artigos de opinião podem ser jogos. <a href="https://observador.pt/interativo/costa-strike-experimente-o-novo-jogo-do-observador/" target="_blank" rel="noopener">Jogar</a> · Observador</dd>
+      </div>
+    </dl>
+
+    <a class="saida" href="https://www.journalismgames.org/" target="_blank" rel="noopener">
+      <span class="gancho">E há centenas mais.</span>
+      <span class="url">journalismgames.org</span>
+      <span class="nota">Um repositório de jogos feitos por jornais do mundo inteiro.</span>
+    </a>
+  </section>
+
+  <section class="cartao" id="c3">
+    <div class="sobrancelha">03 <b>/</b> Os dados</div>
+    <h2>E uma folha de Excel?</h2>
+    <p class="corrido">Também. Alguém pegou em dados de turismo e fez com eles um <a href="https://playabledatalab-tourist-minesweeper.netlify.app/?lang=en" target="_blank" rel="noopener">campo-minado</a>.</p>
+    <p class="corrido">A verdade é que o jornalismo de dados é o maior aliado da gamificação. Um gráfico interativo conta histórias, e <span class="mark">não é a única forma de contar histórias com números</span>. Podes ler, podes ouvir <a href="https://www.npr.org/sections/money/2011/04/27/135737940/the-case-shiller-index-sung-as-opera" target="_blank" rel="noopener">o preço das casas cantado por um barítono</a>, podes desenhar os números tu mesmo, e até podes acabar a fazer <a href="https://statstostitches.org/" target="_blank" rel="noopener">crochet</a>.</p>
+    <p>No dia em que o planeta chegou aos 8 mil milhões de pessoas, dois jornais portugueses pegaram na mesma base de dados e publicaram trabalhos diferentes.</p>
+    <a class="saida" href="https://multimedia.expresso.pt/8-mil-milhoes/" target="_blank" rel="noopener">
+      <span class="url">multimedia.expresso.pt/8-mil-milhoes</span>
+      <span class="nota">Expresso</span>
+    </a>
+    <a class="saida" href="https://www.publico.pt/interactivo/8-mil-milhoes" target="_blank" rel="noopener">
+      <span class="url">publico.pt/interactivo/8-mil-milhoes</span>
+      <span class="nota">Público</span>
+    </a>
+    <p class="miudo corrido">E isto tem morada fixa. Há secções só de dados no <a href="https://expresso.pt/dados" target="_blank" rel="noopener">Expresso</a>, no <a href="https://www.publico.pt/dados" target="_blank" rel="noopener">Público</a> e na <a href="https://rr.pt/jornalismo-de-dados/tag/1313/" target="_blank" rel="noopener">Rádio Renascença</a>.</p>
+  </section>
+
+  <section class="cartao" id="c4">
+    <div class="sobrancelha">04 <b>/</b> Personalização</div>
+    <h2>Somos todos diferentes.</h2>
+    <p class="corrido">E queremos todos saber coisas diferentes. Um jogo consegue, <span class="mark">numa só ferramenta, dar isso a qualquer um</span>. Podes procurar pelo teu concelho, pela tua escola.</p>
+    <a class="saida" href="https://pudding.cool/2021/10/judge-my-music/" target="_blank" rel="noopener">
+      <span class="gancho">Já imaginaste um jornal a dar roast ao teu Spotify?</span>
+      <span class="url">pudding.cool/2021/10/judge-my-music</span>
+      <span class="nota">The Pudding · inglês</span>
+    </a>
+    <a class="saida" href="https://multimedia.expresso.pt/retratoconcelhosportugal2025/" target="_blank" rel="noopener">
+      <span class="gancho">O retrato do teu concelho</span>
+      <span class="url">multimedia.expresso.pt/retratoconcelhosportugal2025</span>
+      <span class="nota">Expresso</span>
+    </a>
+    <a class="saida" href="https://multimedia.expresso.pt/autarquicas2025mapas/" target="_blank" rel="noopener">
+      <span class="gancho">O mesmo retrato, com menos jogo</span>
+      <span class="url">multimedia.expresso.pt/autarquicas2025mapas</span>
+      <span class="nota">Os mesmos dados, sem te pedirem nada. Há sempre várias formas de contar a mesma história, e gamificar é uma escolha, não uma obrigação.</span>
+    </a>
+    <p class="miudo">E na maioria das vezes ainda levas com as explicações por cima: como é que aquilo foi feito, de onde vieram os números.</p>
+  </section>
+
+  <section class="cartao" id="c5">
+    <div class="sobrancelha">05 <b>/</b> Uma questão de confiança</div>
+    <h2>Confiar nos números.</h2>
+    <p>O jornalismo de dados tem uma forte raiz no jornalismo de precisão e no jornalismo computacional. Podemos falar do que isso é em setembro. Por agora interessa uma herança: <span class="mark">o hábito de publicar o método</span>.</p>
+    <p>Em vez de dizer a quem lê “confia em nós”, diz “olha como chegámos aqui”. E há redações que vão mais longe e publicam os próprios dados. Assim, quem lê não fica só a saber o que foi descoberto. Pode ir lá investigar e chegar às suas próprias conclusões.</p>
+    <p class="miudo">Em Portugal, a Rádio Renascença começou a fazê-lo em 2017, embora já não atualize o repositório há algum tempo. O Público tem continuado. Não é preciso perceber uma linha de código. O que interessa é o gesto.</p>
+    <a class="saida" href="https://github.com/publico-data" target="_blank" rel="noopener">
+      <span class="url">github.com/publico-data</span>
+      <span class="nota">Catorze pastas com os bastidores de trabalhos publicados: autárquicas de 2025, incêndios, temperaturas, habitação. Basta ver a lista.</span>
+    </a>
+    <a class="saida" href="https://shifter.pt/2019/06/radio-renascenca-jornalismo-de-dados-open-source/" target="_blank" rel="noopener">
+      <span class="url">shifter.pt · Rádio Renascença: jornalismo de dados open source</span>
+      <span class="nota">A história de como isto começou em Portugal.</span>
+    </a>
+  </section>
+
+  <section class="cartao" id="c6">
+    <div class="sobrancelha">06 <b>/</b> Porquê</div>
+    <h2>E porquê dar-se a este trabalho?</h2>
+    <p class="citacao">Os newsgames chegam a novos públicos, explicam sistemas complicados, e <span class="mark">“colocam os jogadores na pele de outra pessoa”</span>.<cite>Cabales, 2019</cite></p>
+    <p>Podes ler mil palavras sobre alguém e continuar a não perceber as escolhas dessa pessoa. Se te puserem a fazer as escolhas dela, com as contas dela, percebes em dez minutos.</p>
+    <p class="miudo">E funciona: quando o Financial Times lançou o jogo da Uber, em 2017, quem entrou ficou em média 20 minutos na página. Nenhum outro interativo do jornal chegou perto.</p>
+  </section>
+
+  <section class="cartao" id="c7">
+    <div class="sobrancelha">07 <b>/</b> Na tua escola</div>
+    <h2>E podes fazer um.</h2>
+    <p>Se tens jornal escolar, ou se andas a pensar em fazê-lo, e gostavas de integrar a gamificação ou o jornalismo de dados, <span class="mark">podes seguir estes guias</span>.</p>
+    <a class="saida" href="https://ebooks.uminho.pt/index.php/uminho/catalog/download/180/247/4270?inline=1" target="_blank" rel="noopener">
+      <span class="gancho">Newsgames: Como Interagir Com a Informação</span>
+      <span class="url">Ler o capítulo</span>
+    </a>
+    <a class="saida" href="https://ebooks.uminho.pt/index.php/uminho/catalog/download/180/247/4268?inline=1" target="_blank" rel="noopener">
+      <span class="gancho">Jornalismo de Dados: Os Números Também Contam Histórias</span>
+      <span class="url">Ler o capítulo</span>
+    </a>
+
+    <p class="pergunta">Da próxima vez que jogares alguma coisa, pensa: isto podia ser uma notícia <span class="mark">e não deixava de ser credível</span>.</p>
+    <p class="convite">Tens alguma dúvida, ou algum tema sobre dados que gostavas que eu explorasse? <a href="mailto:cbarros@expresso.impresa.pt?subject=Material%20de%20apoio%20%C2%B7%20Newsgames">Podes contactar-me.</a></p>
+
+    <div class="creditos">
+      Material de apoio · Newsgames · 2026<br><br>
+      Cátia Barros | Expresso<br>
+      <a href="mailto:cbarros@expresso.impresa.pt">cbarros@expresso.impresa.pt</a><br>
+      <a href="mailto:catia.s.g.barros@gmail.com">catia.s.g.barros@gmail.com</a><br>
+      <a href="https://catia.pt" target="_blank" rel="noopener">catia.pt</a>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var docEl = document.documentElement;
+
+  /* tema — alterna e guarda a preferência */
+  var btnTema = document.querySelector('.tema'),
+      metaCor = document.querySelector('meta[name="theme-color"]');
+  function sincroniza(){
+    var escuro = docEl.getAttribute('data-tema') === 'escuro';
+    if(metaCor){
+      var c = getComputedStyle(docEl).getPropertyValue('--papel').trim();
+      if(c) metaCor.setAttribute('content', c);
+    }
+    btnTema.setAttribute('aria-label', escuro ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+  }
+  sincroniza();
+  btnTema.addEventListener('click', function(){
+    var novo = docEl.getAttribute('data-tema') === 'escuro' ? 'claro' : 'escuro';
+    docEl.setAttribute('data-tema', novo);
+    try{ localStorage.setItem('tema-esv', novo); }catch(e){}
+    sincroniza();
+  });
+
+  /* menu mobile */
+  var btnMenu = document.querySelector('.menu-btn'),
+      menu    = document.getElementById('menu-mobile');
+  function abre(v){
+    btnMenu.setAttribute('aria-expanded', v ? 'true' : 'false');
+    menu.hidden = !v;
+    document.body.style.overflow = v ? 'hidden' : '';
+  }
+  btnMenu.addEventListener('click', function(){ abre(btnMenu.getAttribute('aria-expanded') !== 'true'); });
+  menu.addEventListener('click', function(e){ if(e.target.closest('a')) abre(false); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') abre(false); });
+
+  /* progresso — cria uma âncora por secção */
+  var cartoes = [].slice.call(document.querySelectorAll('.cartao')),
+      barra   = document.querySelector('.progresso'),
+      elos    = [].slice.call(document.querySelectorAll('.rail a, .menu-mobile a'));
+
+  var seg = cartoes.map(function(c, i){
+    var a = document.createElement('a');
+    a.href = '#' + c.id;
+    a.setAttribute('aria-label', 'Secção ' + (i + 1));
+    a.appendChild(document.createElement('i'));
+    barra.appendChild(a);
+    return a;
+  });
+
+  function marcar(i){
+    seg.forEach(function(s,n){ s.className = n < i ? 'passou' : n === i ? 'aqui' : ''; });
+    var alvo = '#' + cartoes[i].id;
+    elos.forEach(function(a){ a.setAttribute('aria-current', a.getAttribute('href') === alvo ? 'true' : 'false'); });
+  }
+
+  var io = new IntersectionObserver(function(entradas){
+    entradas.forEach(function(e){
+      if(!e.isIntersecting) return;
+      e.target.classList.add('aberto');
+      marcar(cartoes.indexOf(e.target));
+    });
+  }, {threshold:0.4});
+
+  cartoes.forEach(function(c){ io.observe(c); });
+  marcar(0);
+})();
+</script>
+</body>
+</html>
