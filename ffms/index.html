@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cátia Barros · Escola de Verão '26</title>
+<meta name="description" content="Olá, sou a Cátia, jornalista de dados e interatividade do Expresso. Materiais da Escola de Verão da FFMS.">
+<meta property="og:title" content="Cátia Barros · Escola de Verão '26">
+<meta property="og:description" content="Materiais sobre jornalismo de dados, newsgames e como os números viram notícia.">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="robots" content="noindex, nofollow">
+
+<script>
+/* Resolve o tema antes de pintar, para não haver flash. */
+(function(){try{
+  var t=localStorage.getItem('tema-esv');
+  if(t!=='claro'&&t!=='escuro')t=matchMedia('(prefers-color-scheme:dark)').matches?'escuro':'claro';
+  document.documentElement.setAttribute('data-tema',t);
+}catch(e){}})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --papel:#FFFFFF;
+  --tinta:#0D0D0D;
+  --marcador:rgba(226,129,121,.45);
+  --caneta:#743737;
+  --sombra:#6B6B6B;
+  --linha:#DCDCDC;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --corpo:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-tema="claro"]){
+    --papel:#151515;--tinta:#ECECEC;--marcador:rgba(226,129,121,.42);
+    --caneta:#E4A39B;--sombra:#9C9C9C;--linha:#333333;
+  }
+}
+:root[data-tema="escuro"]{
+  --papel:#151515;--tinta:#ECECEC;--marcador:rgba(226,129,121,.42);
+  --caneta:#E4A39B;--sombra:#9C9C9C;--linha:#333333;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--papel);
+  color:var(--tinta);
+  font-family:var(--corpo);
+  font-size:18px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  min-height:100dvh;
+}
+.envolve{
+  max-width:660px;
+  margin:0 auto;
+  padding:72px 24px calc(64px + env(safe-area-inset-bottom,0px));
+}
+
+.sobrancelha{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--sombra);
+  margin-bottom:18px;
+}
+h1{
+  font-family:var(--display);
+  font-weight:800;
+  line-height:1.03;
+  letter-spacing:-.02em;
+  font-size:clamp(2.1rem,7vw,2.9rem);
+  text-wrap:balance;
+}
+.intro{font-size:1.12rem;max-width:34em;margin-top:16px;color:var(--sombra)}
+.intro b{color:var(--tinta);font-weight:500}
+.intro a{color:var(--caneta);text-decoration:none;border-bottom:1px solid var(--caneta)}
+.intro a:hover,.intro a:focus-visible{background:var(--marcador);color:var(--tinta)}
+
+.materiais{margin-top:44px}
+.item{
+  display:block;
+  text-decoration:none;
+  color:inherit;
+  border-top:1px solid var(--linha);
+  padding:22px 0;
+}
+.materiais .item:last-child{border-bottom:1px solid var(--linha)}
+.item .topo{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:12px;
+}
+.item h2{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:1.5rem;
+  letter-spacing:-.01em;
+  line-height:1.1;
+}
+.item .ano{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:.1em;
+  color:var(--sombra);
+  flex:none;
+}
+.item .frase{
+  font-style:italic;
+  font-size:1.05rem;
+  margin-top:6px;
+  max-width:32em;
+}
+.item .frase .mark{
+  background:linear-gradient(var(--marcador),var(--marcador)) no-repeat 0 86%;
+  background-size:100% 44%;
+  padding:0 .06em;margin:0 -.06em;
+}
+.item .url{
+  font-family:var(--mono);
+  font-size:12px;
+  color:var(--caneta);
+  margin-top:10px;
+  display:inline-block;
+}
+.item:hover h2{color:var(--caneta)}
+.item:hover .url{background:var(--marcador);color:var(--tinta)}
+
+.pe{
+  margin-top:52px;
+  font-family:var(--mono);
+  font-size:11.5px;
+  line-height:1.9;
+  color:var(--sombra);
+}
+.pe a{color:var(--caneta);text-decoration:none}
+.pe a:hover{background:var(--marcador);color:var(--tinta)}
+
+/* botão de tema */
+.tema{
+  position:fixed;
+  right:16px;
+  bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  width:46px;height:46px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--papel);
+  border:1px solid var(--linha);
+  border-radius:50%;
+  color:var(--tinta);
+  cursor:pointer;
+  box-shadow:0 2px 14px rgba(0,0,0,.12);
+  -webkit-tap-highlight-color:transparent;
+}
+.tema:hover{border-color:var(--sombra)}
+.tema svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.i-sol{display:none}
+:root[data-tema="escuro"] .i-lua{display:none}
+:root[data-tema="escuro"] .i-sol{display:block}
+
+a:focus-visible{outline:2px solid var(--caneta);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<button class="tema" type="button" aria-label="Mudar para tema escuro">
+  <svg class="i-lua" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+  <svg class="i-sol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+</button>
+
+<main class="envolve">
+  <div class="sobrancelha">Escola de Verão '26 · (Des)informação e Democracia</div>
+  <h1>Olá, sou a Cátia.</h1>
+  <p class="intro">Sou <a href="https://expresso.pt/autores/2022-06-16-catia-barros-8c61cad2" target="_blank" rel="noopener">jornalista de dados e interatividade do Expresso</a>. Aqui ficam os materiais desta sessão — fica à vontade para explorar.</p>
+
+  <div class="materiais">
+    <a class="item" href="material-de-apoio/index.html">
+      <div class="topo">
+        <h2>Material de apoio</h2>
+        <span class="ano">2026</span>
+      </div>
+      <p class="frase">Como é que os números viram <span class="mark">notícia</span> — e porque é que isso é uma decisão.</p>
+      <span class="url">catia.pt/ffms/material-de-apoio</span>
+    </a>
+
+    <a class="item" href="base-de-dados/index.html">
+      <div class="topo">
+        <h2>Uma base de dados, muitas histórias</h2>
+        <span class="ano">2026</span>
+      </div>
+      <p class="frase">O mesmo inquérito de 41 respostas, contado como texto, gráficos, quiz e <span class="mark">jogo</span>.</p>
+      <span class="url">catia.pt/ffms/base-de-dados</span>
+    </a>
+  </div>
+
+  <div class="pe">
+    <a href="https://catia.pt" target="_blank" rel="noopener">catia.pt</a> | <a href="mailto:cbarros@expresso.impresa.pt">cbarros@expresso.impresa.pt</a> e <a href="mailto:catia.s.g.barros@gmail.com">catia.s.g.barros@gmail.com</a>
+  </div>
+</main>
+
+<script>
+(function(){
+  var docEl = document.documentElement,
+      btn   = document.querySelector('.tema'),
+      meta  = document.querySelector('meta[name="theme-color"]');
+  function sincroniza(){
+    var escuro = docEl.getAttribute('data-tema') === 'escuro';
+    if(meta){ var c = getComputedStyle(docEl).getPropertyValue('--papel').trim(); if(c) meta.setAttribute('content', c); }
+    btn.setAttribute('aria-label', escuro ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+  }
+  sincroniza();
+  btn.addEventListener('click', function(){
+    var novo = docEl.getAttribute('data-tema') === 'escuro' ? 'claro' : 'escuro';
+    docEl.setAttribute('data-tema', novo);
+    try{ localStorage.setItem('tema-esv', novo); }catch(e){}
+    sincroniza();
+  });
+})();
+</script>
+</body>
+</html>

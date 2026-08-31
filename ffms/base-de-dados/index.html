@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quatro maneiras de contar 41 respostas</title>
+<meta name="description" content="O mesmo inquérito de 41 respostas, tratado como notícia, como gráficos, como quiz e como jogo.">
+<meta name="robots" content="noindex, nofollow">
+<script>
+/* Resolve o tema antes de pintar, para não haver flash. */
+(function(){try{
+  var t=localStorage.getItem('tema-esv');
+  if(t!=='claro'&&t!=='escuro')t=matchMedia('(prefers-color-scheme:dark)').matches?'escuro':'claro';
+  document.documentElement.setAttribute('data-tema',t);
+}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;border-radius:0}
+:root{
+  /* Paleta FFMS: fundo branco, salmão marca, castanho liga. */
+  --papel:#FFFFFF; --tinta:#0D0D0D; --caneta:#743737; --salmao:#E28179;
+  --marcador:rgba(226,129,121,.45);
+  --cinza:#6B6B6B; --linha:#DCDCDC; --nav:2.85rem;
+  /* escala de dados, do mais ao menos: castanho -> salmão -> claro */
+  --d3:#743737; --d2:#B26D63; --d1:#E28179; --d0:#E7E3E1; --dc1:#DBB8B2;
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --corpo:"Newsreader",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+/* Tema escuro: mesma paleta FFMS, aclarada para ler sobre fundo escuro. */
+@media (prefers-color-scheme:dark){:root:not([data-tema="claro"]){
+  --papel:#151515;--tinta:#ECECEC;--caneta:#E4A39B;--salmao:#E28179;
+  --marcador:rgba(226,129,121,.42);--cinza:#9C9C9C;--linha:#333333;
+  --d3:#E4A39B;--d2:#C07B72;--d1:#9A564E;--d0:#2C2C2C;--dc1:#6E4A45;
+}}
+:root[data-tema="escuro"]{
+  --papel:#151515;--tinta:#ECECEC;--caneta:#E4A39B;--salmao:#E28179;
+  --marcador:rgba(226,129,121,.42);--cinza:#9C9C9C;--linha:#333333;
+  --d3:#E4A39B;--d2:#C07B72;--d1:#9A564E;--d0:#2C2C2C;--dc1:#6E4A45;
+}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--papel);color:var(--tinta);
+  font-family:var(--corpo);line-height:1.55}
+.env{max-width:44rem;margin:0 auto;padding:0 1.1rem}
+
+/* ---------- navegação ---------- */
+nav{position:sticky;top:0;z-index:40;background:var(--papel);height:var(--nav);
+  display:flex;align-items:stretch;border-bottom:1px solid var(--linha)}
+nav a{flex:1;display:flex;align-items:center;justify-content:center;
+  color:var(--cinza);text-decoration:none;font-family:var(--mono);
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  border-right:1px solid var(--linha)}
+nav a:last-child{border-right:0}
+nav a:hover{color:var(--tinta)}
+nav a[aria-current="true"]{color:var(--tinta);font-weight:700;box-shadow:inset 0 -3px 0 var(--salmao)}
+nav a:focus-visible{outline:3px solid var(--salmao);outline-offset:-3px}
+
+/* ---------- tipografia base ---------- */
+h1{font-family:var(--display);font-weight:800;line-height:1.02;
+  font-size:clamp(2.2rem,9vw,3.6rem);margin:0 0 .9rem;letter-spacing:-.02em}
+h2{font-family:var(--display);font-weight:800;line-height:1.05;
+  font-size:clamp(1.7rem,6.5vw,2.5rem);margin:0 0 .7rem;letter-spacing:-.015em}
+h3{font-family:var(--display);font-weight:700;font-size:1.05rem;margin:2.4rem 0 .2rem;letter-spacing:-.01em}
+p{font-family:var(--corpo);font-size:1.05rem;line-height:1.65;
+  max-width:64ch;margin:0 0 1.1rem}
+.lead{font-size:1.2rem;max-width:34ch}
+.chapeu{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cinza);margin:0 0 1.2rem}
+.sub{font-family:var(--corpo);font-size:.95rem;color:var(--cinza);
+  max-width:56ch;margin:0 0 1rem}
+b{font-weight:700}
+
+header.capa{padding:2.6rem 0 2.2rem}
+section{padding:3.2rem 0 3.4rem;border-top:1px solid var(--linha)}
+section:first-of-type{border-top:0}
+
+button{font-family:var(--corpo);font-size:1rem;padding:.75rem 1rem;
+  cursor:pointer;border:1px solid var(--tinta);background:transparent;
+  color:var(--tinta);text-align:left}
+button:hover{background:var(--tinta);color:var(--papel)}
+button:focus-visible{outline:3px solid var(--salmao);outline-offset:2px}
+button.principal{background:var(--tinta);color:var(--papel)}
+button.principal:hover{opacity:.85}
+button.larga{display:block;width:100%}
+.escondido{display:none}
+
+/* ---------- secção texto ---------- */
+.nota{font-family:var(--mono);font-size:.76rem;color:var(--cinza);
+  line-height:1.6;max-width:60ch;border-top:1px solid var(--linha);
+  padding-top:1rem;margin-top:2.4rem}
+.nota p{font-family:inherit;font-size:inherit;max-width:none;margin:0 0 .7rem}
+.nota p:last-child{margin:0}
+.nota strong{color:var(--tinta)}
+
+/* ---------- grelhas de 41 ---------- */
+.controlos{display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 1.1rem}
+.controlos button{font-family:var(--mono);font-size:.72rem;letter-spacing:.04em;
+  text-transform:uppercase;padding:.45rem .8rem}
+.linha-dados{margin:0 0 .85rem}
+.rotulo{display:flex;justify-content:space-between;align-items:baseline;gap:.6rem;
+  font-family:var(--mono);font-size:.72rem;margin:0 0 .22rem}
+.rotulo b{font-weight:400;letter-spacing:.02em}
+.rotulo span{color:var(--cinza);font-variant-numeric:tabular-nums;white-space:nowrap}
+.celulas{display:grid;grid-template-columns:repeat(41,1fr);gap:1px}
+.c{aspect-ratio:1;background:var(--linha);cursor:pointer}
+.c[data-v="3"]{background:var(--d3)}
+.c[data-v="2"]{background:var(--d2)}
+.c[data-v="1"]{background:var(--d1)}
+.c[data-v="0"]{background:var(--d0)}
+body.foco .c{opacity:.25}
+body.foco .c.on{opacity:1;outline:1px solid var(--tinta)}
+@media (prefers-reduced-motion:no-preference){.c{transition:opacity .12s}}
+.legenda{display:flex;flex-wrap:wrap;gap:.9rem;font-family:var(--mono);
+  font-size:.7rem;letter-spacing:.02em;color:var(--cinza);margin:.6rem 0 0}
+.legenda i{display:inline-block;width:.7rem;height:.7rem;margin-right:.3rem;
+  vertical-align:-1px;background:var(--linha)}
+figure{margin:0 0 1.4rem}
+figcaption{font-family:var(--mono);font-size:.7rem;color:var(--cinza);
+  margin-top:.55rem;max-width:60ch;line-height:1.6}
+.ficha{border:1px solid var(--tinta);background:var(--papel);padding:.75rem .85rem;
+  margin:1rem 0 1.6rem;font-family:var(--corpo);font-size:.95rem;min-height:5.4rem}
+.ficha .vazio{color:var(--cinza)}
+.horas{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;align-items:end;
+  height:120px;margin:.4rem 0 .3rem}
+.horas div{background:var(--caneta)}
+.eixo{display:grid;grid-template-columns:repeat(24,1fr);gap:2px;
+  font-family:var(--mono);font-size:.58rem;color:var(--cinza);text-align:center}
+
+/* ---------- quiz ---------- */
+.marcador{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;margin:0 0 1rem}
+.marcador div{height:6px;background:var(--linha)}
+.marcador div.ok{background:var(--caneta)}
+.marcador div.ko{background:var(--salmao)}
+.cartao{border:1px solid var(--tinta);background:var(--papel);padding:1.6rem 1.2rem;
+  min-height:14rem;display:flex;flex-direction:column;justify-content:space-between}
+.frase{font-family:var(--corpo);font-style:italic;font-size:clamp(1.2rem,4.6vw,1.5rem);
+  line-height:1.4;margin:0 0 1.4rem;max-width:30ch}
+.aspas{color:var(--cinza)}
+.escolhas{display:grid;gap:.5rem}
+@media (min-width:30rem){.escolhas{grid-template-columns:1fr 1fr}}
+.veredicto{border-left:4px solid var(--caneta);padding:.2rem 0 .2rem .9rem;margin:0 0 1.1rem}
+.veredicto.errado{border-color:var(--salmao)}
+.veredicto b.tit{display:block;font-family:var(--mono);font-size:.72rem;
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:.25rem}
+.veredicto p{font-family:var(--corpo);font-size:.98rem;margin:0;
+  color:var(--cinza);max-width:52ch}
+.resultado{border:1px solid var(--tinta);background:var(--papel);padding:1.4rem 1.2rem}
+.pontuacao{font-family:var(--display);font-weight:800;font-size:clamp(2.4rem,11vw,3.4rem);
+  line-height:1;margin:0 0 .5rem;letter-spacing:-.02em}
+.pergunta{margin:0 0 1.8rem}
+.pergunta h4{font-family:var(--display);font-size:1.18rem;font-weight:700;
+  margin:0 0 .7rem;max-width:32ch;letter-spacing:-.01em}
+.opcoes{display:grid;gap:.35rem}
+.barra{display:grid;gap:1px;margin:.5rem 0 .3rem}
+.barra div{aspect-ratio:1;background:var(--linha)}
+.barra div.grupo{background:var(--caneta)}
+.barra div.tu{background:var(--salmao);outline:1px solid var(--tinta)}
+.legenda-barra{font-family:var(--corpo);font-size:.92rem;color:var(--cinza);
+  margin:0 0 .6rem}
+.espelho{border:1px solid var(--tinta);background:var(--papel);padding:1.3rem 1.1rem;margin:1.4rem 0 0}
+
+/* ---------- jogo ---------- */
+.painel{position:sticky;top:var(--nav);background:var(--papel);
+  padding:.7rem 0 .8rem;z-index:20;border-bottom:1px solid var(--linha);margin:0 0 1.4rem}
+.medidores{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--cinza);margin:0 0 .45rem}
+.medidores b{font-family:var(--display);font-weight:700;font-size:1.1rem;letter-spacing:-.01em;
+  text-transform:none;color:var(--tinta);margin-left:.35rem}
+.leitores{display:grid;grid-template-columns:repeat(41,1fr);gap:1px}
+.leitores div{aspect-ratio:1;background:var(--d0)}
+.leitores div[data-c="1"]{background:var(--dc1)}
+.leitores div[data-c="2"]{background:var(--d2)}
+.leitores div[data-c="3"]{background:var(--d3)}
+.leitores div[data-c="-1"]{background:var(--salmao)}
+.cena{border:1px solid var(--tinta);background:var(--papel);padding:1.3rem 1.1rem}
+.dia{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--cinza);margin:0 0 .6rem}
+.situacao{font-family:var(--corpo);font-size:clamp(1.15rem,4.4vw,1.38rem);
+  line-height:1.4;margin:0 0 1.2rem;max-width:34ch}
+.efeito{border-left:4px solid var(--caneta);padding:.1rem 0 .1rem .9rem;margin:0 0 1.1rem}
+.efeito p{margin:0 0 .5rem;max-width:52ch}
+.efeito .contas{font-family:var(--mono);font-size:.76rem;line-height:1.6;color:var(--cinza);margin:0}
+.fim{border:1px solid var(--tinta);background:var(--papel);padding:1.4rem 1.2rem}
+.grande{font-family:var(--display);font-weight:800;font-size:clamp(2rem,9vw,2.8rem);
+  line-height:1.05;margin:0 0 .7rem;letter-spacing:-.02em}
+.grupos{display:grid;gap:.35rem;margin:1.1rem 0 1.4rem}
+.grupo-linha{display:grid;grid-template-columns:8.5rem 1fr;gap:.5rem;
+  align-items:center;font-family:var(--mono);font-size:.72rem;letter-spacing:.02em}
+.mini{display:flex;gap:1px;flex-wrap:wrap;align-items:center}
+.mini i{width:10px;height:10px;background:var(--caneta);display:block}
+.mini i.off{background:var(--linha)}
+
+/* legendas — usam a escala de dados para condizer em claro e escuro */
+.legenda i.sw3{background:var(--d3)}
+.legenda i.sw2{background:var(--d2)}
+.legenda i.sw1{background:var(--d1)}
+.legenda i.sw0{background:var(--d0)}
+
+/* botão de tema — assinatura FFMS */
+.tema{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+  background:var(--papel);border:1px solid var(--linha);border-radius:50%;
+  color:var(--tinta);cursor:pointer;box-shadow:0 2px 14px rgba(0,0,0,.12);z-index:50;
+  -webkit-tap-highlight-color:transparent}
+.tema:hover{border-color:var(--cinza)}
+.tema svg{width:20px;height:20px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.i-sol{display:none}
+:root[data-tema="escuro"] .i-lua{display:none}
+:root[data-tema="escuro"] .i-sol{display:block}
+
+/* voltar ao início — segmento fixo na barra de navegação (sempre visível) */
+nav .nav-inicio{flex:0 0 auto;padding:0 1rem;color:var(--caneta)}
+nav .nav-inicio:hover{color:var(--tinta)}
+@media (max-width:600px){
+  nav a{letter-spacing:.03em}
+  nav .nav-inicio{padding:0 .65rem}
+}
+</style>
+</head>
+<body>
+
+<button class="tema" type="button" aria-label="Mudar para tema escuro">
+  <svg class="i-lua" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+  <svg class="i-sol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+</button>
+
+<nav aria-label="Secções">
+  <a class="nav-inicio" href="../">← Início</a>
+  <a href="#texto">Texto</a>
+  <a href="#graficos">Gráficos</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#jogo">Jogo</a>
+</nav>
+
+<div class="env">
+<header class="capa">
+  <p class="chapeu">Escola de Verão 2026 · Inquérito de inscrição</p>
+  <h1>Quatro maneiras de contar 41 respostas</h1>
+  <p class="lead">O mesmo formulário de inscrição, tratado como notícia escrita, como gráficos, como quiz e como jogo. A escolha entre eles é editorial, não técnica.</p>
+</header>
+
+<!-- ============ 1. TEXTO ============ -->
+<section id="texto">
+  <p class="chapeu">Um · Notícia</p>
+  <h2>Vêm mais pelos colegas do que pelos oradores</h2>
+  <p class="lead"><b>Trinta e oito dos 41 jovens inscritos na Escola de Verão da Fundação Francisco Manuel dos Santos dizem-se "muito motivados" para fazer novas amizades. Para conhecer os oradores convidados, apenas 23. É a maior distância entre duas respostas de todo o inquérito de inscrição.</b></p>
+  <p>A desinformação é o tema que mais os interessa — 36 dos 41 acham-no muito interessante. Mas, postos a decidir como diretores de um jornal, só quatro escolhem o combate às notícias falsas como prioridade: a maioria, 14, prefere dar voz às pessoas comuns e aos seus problemas. O que mais os preocupa não é aquilo a que se dedicariam.</p>
+
+</section>
+
+<!-- ============ 2. GRÁFICOS ============ -->
+<section id="graficos">
+  <p class="chapeu">Dois · Gráficos</p>
+  <h2>Estabelecer novas amizades é o que mais motiva os participantes</h2>
+  <p>Das dez razões que o formulário dá para vir, fazer novas amizades é a que reúne mais entusiasmo: 38 dos 41 inscritos dizem-se muito motivados. Ganhar conhecimentos (37) e afiar o sentido crítico (35) vêm logo atrás. Conhecer os oradores convidados fica em último, com 23 — a maior distância entre duas razões de todo o inquérito.</p>
+
+  <h3>O que os motiva a vir</h3>
+  <p class="sub">Grau de motivação declarado, por afirmação.</p>
+  <div class="controlos" role="group" aria-label="Ordenação das linhas">
+    <button id="b-ordem" aria-pressed="true">Ordenar por intensidade</button>
+    <button id="b-original" aria-pressed="false">Ordem do formulário</button>
+  </div>
+  <figure>
+    <div class="grelha" id="g-mot"></div>
+    <div class="legenda">
+      <span><i class="sw3"></i>Muito motivado</span>
+      <span><i class="sw2"></i>Motivado</span>
+      <span><i class="sw1"></i>Pouco motivado</span>
+      <span><i class="sw0"></i>Não sei</span>
+    </div>
+    <figcaption>Cada quadrado é a resposta de um participante. Toque nos quadrados para ver mais sobre o participante. Fonte: formulário “Queremos conhecer-te”.</figcaption>
+  </figure>
+
+  <div class="ficha" id="ficha" aria-live="polite"><span class="vazio">Toque num quadrado para ver esse participante.</span></div>
+
+  <p>Em nenhuma das dez razões alguém se diz pouco motivado — quem se inscreve já decidiu vir. Um inquérito de inscrição não mede entusiasmo; mede a ordem das prioridades. E, aqui, a companhia pesa mais do que o programa.</p>
+
+  <h3>A que horas se responde a um formulário</h3>
+  <p class="sub">Hora de submissão das 41 respostas.</p>
+  <figure>
+    <div class="horas" id="g-horas"></div>
+    <div class="eixo" id="e-horas"></div>
+    <figcaption>Metade das respostas chega entre as 16h e as 20h. Nove chegaram depois das 22h ou de madrugada.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ 3. QUIZ ============ -->
+<section id="quiz">
+  <p class="chapeu">Três · Quiz</p>
+  <h2>Esperança ou medo?</h2>
+  <p class="lead">Doze frases destes jovens: seis sobre o que os entusiasma nos media, seis sobre o que os preocupa. Consegue distinguir?</p>
+
+  <div class="marcador" id="marcador" aria-hidden="true"></div>
+
+  <div class="cartao" id="cartao">
+    <p class="frase" id="frase"></p>
+    <div id="zona"></div>
+  </div>
+
+  <div id="fim-quiz" class="escondido">
+    <div class="resultado">
+      <p class="pontuacao" id="pontos"></p>
+      <p id="analise" style="margin:0;font-family:var(--corpo);font-size:1rem"></p>
+    </div>
+    <p style="margin-top:1.6rem">A dificuldade não é sua. O que dizem que os entusiasma — o alcance, a velocidade, o poder de influenciar — é o mesmo que dizem que os preocupa. As mesmas palavras, com o sinal trocado.</p>
+
+    <h3>Agora responda como eles responderam</h3>
+    <p class="sub">Três perguntas do formulário. Escolha, e veja onde fica no meio dos 41.</p>
+
+    <div class="pergunta">
+      <h4>Se fosse diretor de um jornal, qual seria a sua prioridade?</h4>
+      <div class="opcoes" id="o-prioridade"></div>
+      <div class="barra escondido" id="bar-prioridade"></div>
+      <p class="legenda-barra escondido" id="leg-prioridade"></p>
+    </div>
+    <div class="pergunta">
+      <h4>Preferia viver na cidade ou no campo?</h4>
+      <div class="opcoes" id="o-viver"></div>
+      <div class="barra escondido" id="bar-viver"></div>
+      <p class="legenda-barra escondido" id="leg-viver"></p>
+    </div>
+    <div class="pergunta">
+      <h4>Como gastaria mil euros?</h4>
+      <div class="opcoes" id="o-mil"></div>
+      <div class="barra escondido" id="bar-mil"></div>
+      <p class="legenda-barra escondido" id="leg-mil"></p>
+    </div>
+
+    <div class="espelho escondido" id="espelho"></div>
+  </div>
+</section>
+
+<!-- ============ 4. JOGO ============ -->
+<section id="jogo">
+  <p class="chapeu">Quatro · Newsgame</p>
+  <h2>Diretor por uma semana</h2>
+
+  <div id="intro-jogo">
+    <p class="lead">Herdas um jornal com 41 leitores. Não são inventados: cada um escreveu o que queria de um jornal.</p>
+    <p>Tens sete dias e sete decisões. Cada escolha <b>agrada a uns leitores e afasta outros</b>: ganhas a confiança de quem serves e perde-la de quem ignoras. No fim, vês quantos dos 41 ainda confiam no teu jornal.</p>
+    <button class="principal" id="comecar" style="padding:.85rem 1.6rem">Abrir a redação</button>
+  </div>
+
+  <div id="mesa" class="escondido">
+    <div class="painel">
+      <div class="medidores">Leitores que confiam em si <b id="m-conf">0 de 41</b></div>
+      <div class="leitores" id="leitores"></div>
+    </div>
+    <div class="cena" id="cena"></div>
+  </div>
+
+  <div id="fim-jogo" class="escondido"></div>
+</section>
+
+<footer style="padding:2rem 0 3.5rem;border-top:1px solid var(--linha)">
+  <p class="sub" style="margin:0">Escola de Verão 2026. Dados do formulário de inscrição, 41 respostas.</p>
+</footer>
+</div>
+
+<script id="dados" type="application/json">{"temas":[["liberdade","Liberdade de expressão e da imprensa"],["historias","As histórias jornalísticas"],["investigacao","Jornalismo de investigação"],["formatos","Novos formatos jornalísticos"],["reportagem","Como fazer uma reportagem"],["infotainment","Infotainment"],["factos","Verificação de factos"],["desinformacao","Desinformação e democracia"],["negocio","Modelos de negócio dos media"]],"mot":[["participar","Participar na Escola de Verão"],["oradores","Conhecer os oradores"],["interagir","Interagir com os oradores"],["participantes","Conhecer os participantes"],["amizade","Estabelecer novas amizades"],["reflexao","Atividades de reflexão"],["debate","Atividades de debate"],["critico","Atividades de sentido crítico"],["conhecimentos","Novos conhecimentos"],["tematicas","Discutir as temáticas"]],"pessoas":[{"id":1,"prioridade":"Cobrir o mundo","viver":"Na cidade","mil":"ambos","lingua":"Mandarim","hora":18,"semsonho":true,"liberdade":3,"historias":3,"investigacao":2,"formatos":2,"reportagem":1,"infotainment":2,"factos":2,"desinformacao":3,"negocio":3,"participar":3,"oradores":2,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":2,"critico":3,"conhecimentos":3,"tematicas":3},{"id":2,"prioridade":"Cobrir o mundo","viver":"Na cidade","mil":"outro","lingua":"Mandarim","hora":19,"semsonho":false,"liberdade":3,"historias":2,"investigacao":2,"formatos":3,"reportagem":3,"infotainment":2,"factos":2,"desinformacao":2,"negocio":2,"participar":3,"oradores":2,"interagir":3,"participantes":3,"amizade":3,"reflexao":2,"debate":2,"critico":2,"conhecimentos":3,"tematicas":3},{"id":3,"prioridade":"Dar voz","viver":"Na cidade","mil":"poupar","lingua":"Alemão","hora":19,"semsonho":true,"liberdade":3,"historias":3,"investigacao":3,"formatos":2,"reportagem":3,"infotainment":2,"factos":2,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":4,"prioridade":"Fiscalizar o poder","viver":"Na cidade","mil":"poupar","lingua":"Mandarim","hora":19,"semsonho":false,"liberdade":3,"historias":2,"investigacao":2,"formatos":3,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":2,"interagir":2,"participantes":2,"amizade":2,"reflexao":2,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":5,"prioridade":"Dar voz","viver":"Na cidade","mil":"ambos","lingua":"Francês","hora":20,"semsonho":false,"liberdade":3,"historias":3,"investigacao":3,"formatos":2,"reportagem":3,"infotainment":2,"factos":2,"desinformacao":3,"negocio":2,"participar":3,"oradores":2,"interagir":3,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":2,"conhecimentos":3,"tematicas":2},{"id":6,"prioridade":"Fiscalizar o poder","viver":"Não sei","mil":"viagem","lingua":"Italiano","hora":22,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":0,"factos":3,"desinformacao":2,"negocio":2,"participar":2,"oradores":3,"interagir":3,"participantes":2,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":7,"prioridade":"Fact-checking","viver":"Não sei","mil":"ambos","lingua":"Italiano","hora":23,"semsonho":false,"liberdade":3,"historias":2,"investigacao":2,"formatos":1,"reportagem":2,"infotainment":1,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":8,"prioridade":"Dar voz","viver":"Na cidade","mil":"poupar","lingua":"Francês","hora":17,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":2,"participantes":2,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":9,"prioridade":"Fiscalizar o poder","viver":"Na cidade","mil":"outro","lingua":"Alemão","hora":0,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":3,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":2,"conhecimentos":3,"tematicas":3},{"id":10,"prioridade":"Dar voz","viver":"No campo","mil":"viagem","lingua":"Norueguês","hora":8,"semsonho":true,"liberdade":2,"historias":1,"investigacao":2,"formatos":2,"reportagem":1,"infotainment":0,"factos":3,"desinformacao":3,"negocio":3,"participar":2,"oradores":2,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":2,"tematicas":3},{"id":11,"prioridade":"Contextualizar","viver":"Na cidade","mil":"ambos","lingua":"Italiano","hora":16,"semsonho":false,"liberdade":3,"historias":2,"investigacao":2,"formatos":3,"reportagem":3,"infotainment":3,"factos":2,"desinformacao":3,"negocio":2,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":12,"prioridade":"Dar voz","viver":"No campo","mil":"poupar","lingua":"Mandarim","hora":22,"semsonho":false,"liberdade":2,"historias":2,"investigacao":3,"formatos":2,"reportagem":3,"infotainment":2,"factos":2,"desinformacao":2,"negocio":2,"participar":2,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":2,"debate":2,"critico":3,"conhecimentos":2,"tematicas":2},{"id":13,"prioridade":"Fact-checking","viver":"Na cidade","mil":"outro","lingua":"Italiano","hora":12,"semsonho":false,"liberdade":3,"historias":3,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":2},{"id":14,"prioridade":"Fiscalizar o poder","viver":"Na cidade","mil":"outro","lingua":"Francês","hora":14,"semsonho":false,"liberdade":3,"historias":3,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":3,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":2,"critico":3,"conhecimentos":3,"tematicas":3},{"id":15,"prioridade":"Dar voz","viver":"Não sei","mil":"outro","lingua":"Francês","hora":16,"semsonho":true,"liberdade":3,"historias":0,"investigacao":2,"formatos":2,"reportagem":2,"infotainment":0,"factos":3,"desinformacao":3,"negocio":1,"participar":3,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":16,"prioridade":"Dar voz","viver":"No campo","mil":"outro","lingua":"Alemão","hora":19,"semsonho":false,"liberdade":2,"historias":1,"investigacao":2,"formatos":2,"reportagem":1,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":2,"oradores":2,"interagir":0,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":17,"prioridade":"Contextualizar","viver":"Na cidade","mil":"ambos","lingua":"Italiano","hora":19,"semsonho":false,"liberdade":3,"historias":2,"investigacao":2,"formatos":2,"reportagem":2,"infotainment":3,"factos":3,"desinformacao":2,"negocio":3,"participar":3,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":2,"debate":2,"critico":2,"conhecimentos":3,"tematicas":3},{"id":18,"prioridade":"Dar voz","viver":"Na cidade","mil":"poupar","lingua":"Mandarim","hora":13,"semsonho":true,"liberdade":3,"historias":2,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":19,"prioridade":"Contextualizar","viver":"Na cidade","mil":"poupar","lingua":"Mandarim","hora":15,"semsonho":false,"liberdade":3,"historias":3,"investigacao":2,"formatos":2,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":20,"prioridade":"Fact-checking","viver":"Na cidade","mil":"viagem","lingua":"Italiano","hora":17,"semsonho":false,"liberdade":3,"historias":2,"investigacao":2,"formatos":2,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":21,"prioridade":"Cobrir o mundo","viver":"Na cidade","mil":"viagem","lingua":"Mandarim","hora":20,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":3,"reportagem":2,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":22,"prioridade":"Investigar","viver":"Na cidade","mil":"poupar","lingua":"Francês","hora":21,"semsonho":true,"liberdade":3,"historias":2,"investigacao":3,"formatos":2,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":23,"prioridade":"Dar voz","viver":"Na cidade","mil":"ambos","lingua":"Italiano","hora":11,"semsonho":false,"liberdade":2,"historias":2,"investigacao":1,"formatos":2,"reportagem":1,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":24,"prioridade":"Dar voz","viver":"Na cidade","mil":"viagem","lingua":"Italiano","hora":16,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":3,"reportagem":2,"infotainment":0,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":25,"prioridade":"Contextualizar","viver":"Na cidade","mil":"viagem","lingua":"Francês","hora":17,"semsonho":false,"liberdade":3,"historias":3,"investigacao":3,"formatos":2,"reportagem":3,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":3,"interagir":2,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":26,"prioridade":"Fiscalizar o poder","viver":"Na cidade","mil":"viagem","lingua":"Francês","hora":18,"semsonho":false,"liberdade":3,"historias":3,"investigacao":3,"formatos":2,"reportagem":3,"infotainment":2,"factos":3,"desinformacao":3,"negocio":3,"participar":2,"oradores":2,"interagir":0,"participantes":0,"amizade":2,"reflexao":2,"debate":3,"critico":3,"conhecimentos":2,"tematicas":2},{"id":27,"prioridade":"Fiscalizar o poder","viver":"Na cidade","mil":"poupar","lingua":"Italiano","hora":18,"semsonho":true,"liberdade":2,"historias":3,"investigacao":2,"formatos":2,"reportagem":2,"infotainment":3,"factos":2,"desinformacao":2,"negocio":3,"participar":3,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":2},{"id":28,"prioridade":"Dar voz","viver":"Não sei","mil":"poupar","lingua":"Italiano","hora":20,"semsonho":false,"liberdade":3,"historias":3,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":29,"prioridade":"Contextualizar","viver":"Na cidade","mil":"outro","lingua":"Italiano","hora":23,"semsonho":true,"liberdade":3,"historias":2,"investigacao":2,"formatos":2,"reportagem":3,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":2,"oradores":2,"interagir":2,"participantes":2,"amizade":3,"reflexao":3,"debate":2,"critico":2,"conhecimentos":3,"tematicas":2},{"id":30,"prioridade":"Comunidade","viver":"Na cidade","mil":"outro","lingua":"Inglês","hora":19,"semsonho":false,"liberdade":2,"historias":3,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":0,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":31,"prioridade":"Investigar","viver":"Não sei","mil":"viagem","lingua":"Espanhol","hora":17,"semsonho":false,"liberdade":2,"historias":2,"investigacao":3,"formatos":2,"reportagem":2,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":32,"prioridade":"Investigar","viver":"Na cidade","mil":"viagem","lingua":"Alemão","hora":23,"semsonho":false,"liberdade":2,"historias":2,"investigacao":3,"formatos":3,"reportagem":2,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":33,"prioridade":"Dar voz","viver":"Na cidade","mil":"viagem","lingua":"Árabe","hora":5,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":2,"reportagem":3,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":3,"debate":2,"critico":3,"conhecimentos":3,"tematicas":3},{"id":34,"prioridade":"Dar voz","viver":"No campo","mil":"viagem","lingua":"Alemão","hora":11,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":3,"factos":2,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":35,"prioridade":"Fiscalizar o poder","viver":"No campo","mil":"viagem","lingua":"Francês","hora":23,"semsonho":false,"liberdade":3,"historias":3,"investigacao":3,"formatos":3,"reportagem":3,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":36,"prioridade":"Fact-checking","viver":"Na cidade","mil":"outro","lingua":"Sueco","hora":12,"semsonho":true,"liberdade":3,"historias":2,"investigacao":2,"formatos":3,"reportagem":2,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":3,"interagir":3,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":37,"prioridade":"Cobrir o mundo","viver":"Na cidade","mil":"viagem","lingua":"Italiano","hora":14,"semsonho":true,"liberdade":3,"historias":2,"investigacao":3,"formatos":2,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":2,"interagir":2,"participantes":2,"amizade":2,"reflexao":2,"debate":2,"critico":2,"conhecimentos":2,"tematicas":2},{"id":38,"prioridade":"Comunidade","viver":"Na cidade","mil":"poupar","lingua":"Alemão","hora":17,"semsonho":true,"liberdade":3,"historias":2,"investigacao":2,"formatos":3,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":2,"interagir":3,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":39,"prioridade":"Cobrir o mundo","viver":"Na cidade","mil":"viagem","lingua":"Espanhol","hora":21,"semsonho":false,"liberdade":3,"historias":2,"investigacao":2,"formatos":3,"reportagem":3,"infotainment":3,"factos":3,"desinformacao":3,"negocio":3,"participar":2,"oradores":3,"interagir":2,"participantes":2,"amizade":3,"reflexao":3,"debate":2,"critico":3,"conhecimentos":3,"tematicas":2},{"id":40,"prioridade":"Contextualizar","viver":"No campo","mil":"viagem","lingua":"Francês","hora":17,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":2,"reportagem":2,"infotainment":2,"factos":3,"desinformacao":3,"negocio":3,"participar":3,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":3,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3},{"id":41,"prioridade":"Dar voz","viver":"Na cidade","mil":"poupar","lingua":"Italiano","hora":22,"semsonho":false,"liberdade":3,"historias":2,"investigacao":3,"formatos":2,"reportagem":3,"infotainment":2,"factos":3,"desinformacao":3,"negocio":2,"participar":3,"oradores":2,"interagir":2,"participantes":3,"amizade":3,"reflexao":2,"debate":3,"critico":3,"conhecimentos":3,"tematicas":3}]}</script>
+<script>
+(function(){
+"use strict";
+const D = JSON.parse(document.getElementById('dados').textContent);
+const P = D.pessoas;
+
+/* ============ navegação ============ */
+const links = [...document.querySelectorAll('nav a[href^="#"]')];
+const seccoes = links.map(a => document.querySelector(a.getAttribute('href')));
+const io = new IntersectionObserver(entradas => {
+  entradas.forEach(e => {
+    if (e.isIntersecting){
+      links.forEach(a => a.setAttribute('aria-current',
+        a.getAttribute('href') === '#' + e.target.id ? 'true' : 'false'));
+    }
+  });
+}, {rootMargin: '-45% 0px -50% 0px'});
+seccoes.forEach(s => io.observe(s));
+
+/* ============ 2. grelhas ============ */
+const rotMot = {3:'Muito motivado', 2:'Motivado', 1:'Pouco motivado', 0:'Não respondeu'};
+const rotTema = {3:'Muito interessante', 2:'Interessante', 1:'Pouco interessante', 0:'Não respondeu'};
+
+function desenha(el, campos, rotulos){
+  el.innerHTML = '';
+  campos.forEach(([chave, nome]) => {
+    const n3 = P.filter(p => p[chave] === 3).length;
+    const bloco = document.createElement('div');
+    bloco.className = 'linha-dados';
+    const r = document.createElement('div');
+    r.className = 'rotulo';
+    r.innerHTML = '<b></b><span>' + n3 + ' em 41</span>';
+    r.querySelector('b').textContent = nome;
+    const cel = document.createElement('div');
+    cel.className = 'celulas';
+    P.forEach(p => {
+      const c = document.createElement('div');
+      c.className = 'c';
+      c.dataset.v = p[chave];
+      c.dataset.id = p.id;
+      c.title = 'Participante ' + p.id + ': ' + rotulos[p[chave]];
+      cel.appendChild(c);
+    });
+    bloco.append(r, cel);
+    el.appendChild(bloco);
+  });
+}
+function ordena(campos, ativo){
+  if (!ativo) return campos;
+  return [...campos].sort((a, b) =>
+    P.filter(p => p[b[0]] === 3).length - P.filter(p => p[a[0]] === 3).length);
+}
+const gMot = document.getElementById('g-mot');
+let ordenar = true;
+function render(){
+  desenha(gMot, ordena(D.mot, ordenar), rotMot);
+}
+render();
+const bOrdem = document.getElementById('b-ordem'), bOrig = document.getElementById('b-original');
+function sync(v){
+  ordenar = v;
+  bOrdem.setAttribute('aria-pressed', String(v));
+  bOrig.setAttribute('aria-pressed', String(!v));
+  render();
+}
+bOrdem.onclick = () => sync(true);
+bOrig.onclick = () => sync(false);
+
+const ficha = document.getElementById('ficha');
+const GASTOS = {viagem:'viajar', poupar:'poupar ou investir',
+  ambos:'metade viagem, metade poupança', outro:'outra coisa'};
+function foca(id){
+  document.body.classList.add('foco');
+  document.querySelectorAll('.c').forEach(c => c.classList.toggle('on', c.dataset.id === id));
+  const p = P.find(x => String(x.id) === String(id));
+  ficha.innerHTML = '<b>Participante ' + p.id + '</b> respondeu às ' + p.hora + 'h. ' +
+    'Como diretor de um jornal, a prioridade seria <b>' + p.prioridade.toLowerCase() + '</b>. ' +
+    'Preferia viver ' + p.viver.toLowerCase() + ', gostava de aprender ' + p.lingua.toLowerCase() +
+    ' e gastaria mil euros a ' + GASTOS[p.mil] + '. ' +
+    (p.semsonho ? 'Ainda não sabe qual é o emprego dos seus sonhos.' : '');
+}
+function limpa(){
+  document.body.classList.remove('foco');
+  document.querySelectorAll('.c.on').forEach(c => c.classList.remove('on'));
+  ficha.innerHTML = '<span class="vazio">Toque num quadrado para ver esse participante.</span>';
+}
+document.addEventListener('pointerover', e => {
+  if (e.target.classList.contains('c')) foca(e.target.dataset.id);
+});
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('c')) foca(e.target.dataset.id);
+  else if (document.body.classList.contains('foco')) limpa();
+});
+
+const horas = Array(24).fill(0);
+P.forEach(p => horas[p.hora]++);
+const maxH = Math.max(...horas);
+const gh = document.getElementById('g-horas'), eh = document.getElementById('e-horas');
+horas.forEach((v, h) => {
+  const d = document.createElement('div');
+  d.style.height = (v / maxH * 100) + '%';
+  d.title = h + 'h: ' + v + (v === 1 ? ' resposta' : ' respostas');
+  if (v === 0) d.style.background = 'var(--linha)';
+  gh.appendChild(d);
+  const l = document.createElement('div');
+  l.textContent = (h % 6 === 0) ? h : '';
+  eh.appendChild(l);
+});
+
+/* ============ 3. quiz ============ */
+const FRASES = [
+  {t:'A capacidade de chegar a massas em segundos, passando informações que de outra forma não se poderiam vir a conhecer.', r:'ent', dificil:true},
+  {t:'A rapidez com que a informação circula.', r:'pre', dificil:true},
+  {t:'As suas dinâmicas ocultas e o seu compromisso com a verdade.', r:'ent', dificil:true},
+  {t:'A forma como certas pessoas os usam.', r:'pre', dificil:true},
+  {t:'A utilização de táticas para persuadir o público e transmitir informação.', r:'ent', dificil:true},
+  {t:'O desvirtuar da realidade.', r:'pre', dificil:false},
+  {t:'O impacto que têm na forma como as pessoas pensam, interpretam a realidade e tomam decisões.', r:'ent', dificil:true},
+  {t:'A facilidade com que podemos ficar horas a fazer scroll e com que as notícias se espalham tão rapidamente.', r:'pre', dificil:false},
+  {t:'A maneira como apresentam as notícias e ainda a maneira de mudar opiniões.', r:'ent', dificil:true},
+  {t:'A desinformação, as fake news e a manipulação da opinião pública.', r:'pre', dificil:false},
+  {t:'A influência que têm nas sociedades.', r:'ent', dificil:true},
+  {t:'Por vezes, a falta de transparência.', r:'pre', dificil:false}
+];
+let iq = 0, certas = 0, certasDificeis = 0;
+const marcador = document.getElementById('marcador');
+FRASES.forEach(() => marcador.appendChild(document.createElement('div')));
+
+function mostraFrase(){
+  document.getElementById('frase').innerHTML =
+    '<span class="aspas">&ldquo;</span>' + FRASES[iq].t + '<span class="aspas">&rdquo;</span>';
+  document.getElementById('zona').innerHTML =
+    '<div class="escolhas"><button id="b-ent">Isto entusiasma-os</button>' +
+    '<button id="b-pre">Isto preocupa-os</button></div>';
+  document.getElementById('b-ent').onclick = () => respondeQuiz('ent');
+  document.getElementById('b-pre').onclick = () => respondeQuiz('pre');
+}
+function respondeQuiz(escolha){
+  const f = FRASES[iq];
+  const acertou = escolha === f.r;
+  if (acertou){ certas++; if (f.dificil) certasDificeis++; }
+  marcador.children[iq].className = acertou ? 'ok' : 'ko';
+  document.getElementById('zona').innerHTML =
+    '<div class="veredicto ' + (acertou ? '' : 'errado') + '">' +
+    '<b class="tit">' + (acertou ? 'Certo' : 'Não') + '</b>' +
+    '<p>Foi escrita em resposta a: o que te <b>' +
+    (f.r === 'ent' ? 'entusiasma' : 'preocupa') + '</b> nos meios de comunicação?</p></div>' +
+    '<button class="principal larga" id="b-seguinte">' +
+    (iq === FRASES.length - 1 ? 'Ver o resultado' : 'Frase seguinte') + '</button>';
+  document.getElementById('b-seguinte').onclick = () => {
+    iq++;
+    if (iq < FRASES.length) mostraFrase(); else terminaQuiz();
+  };
+}
+function terminaQuiz(){
+  document.getElementById('cartao').classList.add('escondido');
+  document.getElementById('fim-quiz').classList.remove('escondido');
+  document.getElementById('pontos').textContent = certas + ' em 12';
+  const nd = FRASES.filter(f => f.dificil).length;
+  document.getElementById('analise').textContent =
+    'Acertou ' + certasDificeis + ' das ' + nd + ' frases em que as duas perguntas se tocam, e ' +
+    (certas - certasDificeis) + ' das ' + (FRASES.length - nd) +
+    ' em que uma delas fala explicitamente de desinformação.';
+  constroiPerguntas();
+}
+
+const PERG = {
+  prioridade: {campo:'prioridade',
+    ops:['Dar voz','Fiscalizar o poder','Contextualizar','Cobrir o mundo','Fact-checking','Investigar','Comunidade'],
+    rotulos:{'Dar voz':'Dar voz às pessoas comuns e aos seus problemas',
+      'Fiscalizar o poder':'Fiscalizar os abusos dos poderes',
+      'Contextualizar':'Analisar e contextualizar os acontecimentos',
+      'Cobrir o mundo':'Cobrir o que se passa no mundo',
+      'Fact-checking':'Fazer fact-checking e combater as fake news',
+      'Investigar':'Investigar temas complexos e fazer artigos de fundo',
+      'Comunidade':'Criar comunidades de leitores e valorizar as redes'}},
+  viver: {campo:'viver', ops:['Na cidade','No campo','Não sei'], rotulos:{}},
+  mil: {campo:'mil', ops:['viagem','poupar','ambos','outro'],
+    rotulos:{viagem:'Numa viagem', poupar:'Poupava ou investia',
+      ambos:'Um bocado de cada', outro:'Outra coisa'}}
+};
+const escolhas = {};
+function constroiPerguntas(){
+  Object.entries(PERG).forEach(([chave, cfg]) => {
+    const cx = document.getElementById('o-' + chave);
+    cx.innerHTML = '';
+    cfg.ops.forEach(op => {
+      const b = document.createElement('button');
+      b.className = 'larga';
+      b.textContent = cfg.rotulos[op] || op;
+      b.onclick = () => escolhePergunta(chave, op);
+      cx.appendChild(b);
+    });
+  });
+}
+function escolhePergunta(chave, op){
+  escolhas[chave] = op;
+  const cfg = PERG[chave];
+  const grupo = P.filter(p => p[cfg.campo] === op);
+  const bar = document.getElementById('bar-' + chave);
+  bar.innerHTML = '';
+  bar.classList.remove('escondido');
+  bar.style.gridTemplateColumns = 'repeat(42, 1fr)';
+  P.forEach(p => {
+    const d = document.createElement('div');
+    if (p[cfg.campo] === op) d.className = 'grupo';
+    bar.appendChild(d);
+  });
+  const meu = document.createElement('div');
+  meu.className = 'tu';
+  meu.title = 'A sua resposta';
+  bar.appendChild(meu);
+  const leg = document.getElementById('leg-' + chave);
+  leg.classList.remove('escondido');
+  leg.textContent = grupo.length === 0
+    ? 'Nenhum dos 41 respondeu isso. Está sozinho, e o quadrado laranja é o seu.'
+    : 'Está com ' + grupo.length + ' dos 41. O quadrado laranja é o seu.';
+  document.getElementById('o-' + chave).querySelectorAll('button').forEach(b => {
+    b.classList.toggle('principal', b.textContent === (cfg.rotulos[op] || op));
+  });
+  if (Object.keys(escolhas).length === 3) espelho();
+}
+function espelho(){
+  const e = document.getElementById('espelho');
+  const iguais = P.filter(x => x.prioridade === escolhas.prioridade &&
+    x.viver === escolhas.viver && x.mil === escolhas.mil).length;
+  const doisEmTres = P.filter(x =>
+    (x.prioridade === escolhas.prioridade) + (x.viver === escolhas.viver) +
+    (x.mil === escolhas.mil) >= 2).length;
+  e.classList.remove('escondido');
+  e.innerHTML = '<p style="margin:0 0 .8rem">' + (iguais
+    ? 'Há ' + iguais + (iguais === 1 ? ' pessoa' : ' pessoas') +
+      ' entre os 41 que respondeu exatamente como o leitor às três perguntas.'
+    : 'Nenhum dos 41 respondeu como o leitor às três perguntas ao mesmo tempo. São ' +
+      doisEmTres + ' os que coincidem em duas.') +
+    '</p><p class="sub" style="margin:0">Com 41 pessoas e três perguntas, quase todas as combinações são únicas. É por isso que um inquérito desta dimensão serve para contar o grupo, não para classificar quem responde. Vale como retrato, não como teste.</p>';
+}
+mostraFrase();
+
+/* ============ 4. jogo ============ */
+const leitores = P.map(p => ({id:p.id, grupo:p.prioridade, conf:0}));
+let turno = 0;
+const historico = [];
+
+const CENAS = [
+  {dia:'Segunda-feira',
+   situacao:'Um bairro de 300 pessoas está sem água canalizada há nove dias. Nenhum jornal escreveu sobre isso.',
+   opcoes:[
+     {t:'Passar três dias no bairro a ouvir quem lá vive', ganha:['Dar voz','Comunidade'], perde:[],
+      texto:'A reportagem sai com nomes, idades e horários de quem carrega bidões escada acima. A empresa responde no dia seguinte.'},
+     {t:'Pedir uma resposta à empresa e publicar 500 palavras', ganha:['Cobrir o mundo','Contextualizar'], perde:[],
+      texto:'A notícia está correta e sai a tempo. Não há uma única pessoa do bairro citada.'},
+     {t:'Não é notícia nacional. Passar à frente', ganha:[], perde:['Dar voz','Comunidade'],
+      texto:'No dia seguinte, uma televisão faz a peça. Os seus leitores viram-na lá.'}]},
+  {dia:'Terça-feira',
+   situacao:'Chega um envelope anónimo com indícios de que a câmara adjudicou obras a uma empresa de um familiar do vereador. Confirmar leva três semanas.',
+   opcoes:[
+     {t:'Fechar-se três semanas a confirmar', ganha:['Fiscalizar o poder','Investigar','Fact-checking'], perde:[],
+      texto:'Três semanas sem publicar nada de grande. No fim, a história aguenta-se em tribunal.'},
+     {t:'Publicar já o documento, com um aviso de que não foi confirmado', ganha:['Fiscalizar o poder'], perde:['Fact-checking','Investigar'],
+      texto:'Sai em primeira mão. Dois dias depois, descobre-se que uma das datas do documento está errada, e a discussão passa a ser sobre o seu jornal.'},
+     {t:'Guardar o envelope e seguir para outra coisa', ganha:[], perde:['Fiscalizar o poder','Investigar'],
+      texto:'Ninguém saberá que passou a história à frente. Ninguém, exceto quem lha entregou.'}]},
+  {dia:'Quarta-feira',
+   situacao:'Sobe a taxa de juro. Ao meio-dia, todos os jornais têm o mesmo título com o valor da subida e mais nada.',
+   opcoes:[
+     {t:'Explicar o mecanismo, com gráficos e cinco anos de série', ganha:['Contextualizar','Fact-checking'], perde:[],
+      texto:'É a peça mais lida da semana entre quem já percebia do assunto, e a menos aberta por toda a gente.'},
+     {t:'Titular com quanto sobe a prestação de uma casa média', ganha:['Cobrir o mundo'], perde:['Contextualizar'],
+      texto:'O número no título é real e é o pior caso possível. Ninguém mentiu e ninguém ficou a perceber melhor.'},
+     {t:'Ouvir seis famílias que vão pagar mais a partir de outubro', ganha:['Dar voz','Comunidade'], perde:[],
+      texto:'As histórias são boas e concretas. Fica por explicar porque é que a taxa subiu.'}]},
+  {dia:'Quinta-feira',
+   situacao:'Há uma cimeira internacional no estrangeiro no mesmo dia em que se sabe o desfecho do caso do bairro. Só pode pagar uma das coberturas.',
+   opcoes:[
+     {t:'Enviar uma repórter à cimeira', ganha:['Cobrir o mundo'], perde:['Dar voz'],
+      texto:'A cobertura é boa e igual à de mais dez jornais que também lá estavam.'},
+     {t:'Ficar com a história local até ao fim', ganha:['Dar voz','Comunidade','Fiscalizar o poder'], perde:['Cobrir o mundo'],
+      texto:'É o único jornal a contar o que aconteceu depois. Nesse dia, a cimeira é o assunto em todo o lado menos aqui.'},
+     {t:'Comprar imagens de agência e fazer um explicador da cimeira', ganha:['Contextualizar'], perde:[],
+      texto:'Sai barato e é útil. Não é seu, mas ninguém repara nisso.'}]},
+  {dia:'Sexta-feira',
+   situacao:'Um vídeo falso sobre o presidente da câmara tem 200 mil visualizações desde ontem à noite. A sua redação tem quatro pessoas.',
+   opcoes:[
+     {t:'Publicar um fact-check com a origem do vídeo e as provas', ganha:['Fact-checking','Contextualizar'], perde:[],
+      texto:'O fact-check sai às 14h. É partilhado por professores e por jornalistas, e por quase mais ninguém. O vídeo original continua a circular.'},
+     {t:'Explicar quem beneficia com o boato e como ele nasceu', ganha:['Fact-checking','Contextualizar','Investigar'], perde:[],
+      texto:'A peça é mais lenta a fazer e mais difícil de resumir num título. Quem a lê até ao fim fica a perceber o mecanismo, não só este caso.'},
+     {t:'Noticiar a polémica e incorporar o vídeo na página', ganha:['Cobrir o mundo'], perde:['Fact-checking','Contextualizar'],
+      texto:'É o dia com mais visitas do ano. Ao fim da tarde, o vídeo falso tem mais 60 mil visualizações, e uma parte veio de si.'}]},
+  {dia:'Sábado',
+   situacao:'Uma repórter está há seis meses numa investigação que ainda não tem fim à vista. Esta manhã, um jornal concorrente publicou metade da história.',
+   opcoes:[
+     {t:'Dar-lhe mais dois meses e o arquivo todo', ganha:['Investigar','Fiscalizar o poder'], perde:[],
+      texto:'Dois meses depois, sai a história inteira, com os documentos que faltavam ao concorrente. Já quase ninguém se lembrava do assunto.'},
+     {t:'Publicar hoje o que já existe, para não perder a exclusividade', ganha:['Cobrir o mundo'], perde:['Investigar','Fact-checking'],
+      texto:'Sai a tempo e sem duas confirmações. Um dos visados exige direito de resposta e tem razão num ponto.'},
+     {t:'Tirá-la da investigação e pô-la a fazer o dia a dia', ganha:[], perde:['Investigar','Fiscalizar o poder'],
+      texto:'A redação passa a fechar o dia a horas. A repórter sai do jornal em novembro.'}]},
+  {dia:'Domingo',
+   situacao:'A publicidade caiu 30%. Uma marca oferece o equivalente a três meses de salários para publicar conteúdo pago com aspeto de reportagem.',
+   opcoes:[
+     {t:'Aceitar, e marcar claramente como conteúdo pago', ganha:[], perde:['Contextualizar'],
+      texto:'A etiqueta está lá, em cinzento, no topo. Metade dos leitores não a vê. A redação está paga até dezembro.'},
+     {t:'Recusar e pedir aos leitores que assinem o jornal', ganha:['Comunidade','Dar voz','Fiscalizar o poder','Investigar'], perde:[],
+      texto:'Recebe 400 assinaturas na primeira semana. Não chega para três meses de salários, mas chega para não ter de perguntar isto outra vez.'},
+     {t:'Aceitar sem marcar. É só desta vez', ganha:[], perde:['Fact-checking','Contextualizar','Comunidade','Dar voz'],
+      texto:'Foi o melhor mês de sempre em receitas. Alguém fez uma captura de ecrã e comparou o texto com o comunicado da marca.'}]}
+];
+
+const PEDIDO = {
+  'Dar voz':'queriam dar voz às pessoas comuns',
+  'Fiscalizar o poder':'queriam fiscalizar os abusos do poder',
+  'Contextualizar':'queriam analisar e contextualizar',
+  'Cobrir o mundo':'queriam cobrir o que se passa no mundo',
+  'Fact-checking':'queriam combater as notícias falsas',
+  'Investigar':'queriam investigação e artigos de fundo',
+  'Comunidade':'queriam criar comunidade com os leitores'
+};
+const TAMANHO = {};
+leitores.forEach(l => TAMANHO[l.grupo] = (TAMANHO[l.grupo] || 0) + 1);
+
+function lista(gs){
+  const p = gs.filter(g => TAMANHO[g])
+    .sort((a, b) => TAMANHO[b] - TAMANHO[a])
+    .map(g => 'os ' + TAMANHO[g] + ' que ' + PEDIDO[g]);
+  if (p.length <= 1) return p[0] || '';
+  return p.slice(0, -1).join(', ') + ' e ' + p[p.length - 1];
+}
+
+const elLeitores = document.getElementById('leitores');
+leitores.forEach(l => {
+  const d = document.createElement('div');
+  d.dataset.c = '0';
+  d.title = 'Leitor ' + l.id;
+  elLeitores.appendChild(d);
+});
+function pinta(){
+  leitores.forEach((l, k) => {
+    elLeitores.children[k].dataset.c = l.conf < 0 ? '-1' : String(Math.min(3, l.conf));
+  });
+  document.getElementById('m-conf').textContent =
+    leitores.filter(l => l.conf >= 1).length + ' de 41';
+}
+function cena(){
+  const c = CENAS[turno];
+  const el = document.getElementById('cena');
+  el.innerHTML = '<p class="dia">' + c.dia + ' · dia ' + (turno + 1) + ' de ' + CENAS.length + '</p>' +
+    '<p class="situacao">' + c.situacao + '</p><div class="opcoes"></div>';
+  const ops = el.querySelector('.opcoes');
+  c.opcoes.forEach((o, k) => {
+    const b = document.createElement('button');
+    b.className = 'larga';
+    b.textContent = o.t;
+    b.onclick = () => escolheCena(k);
+    ops.appendChild(b);
+  });
+}
+function escolheCena(k){
+  const o = CENAS[turno].opcoes[k];
+  let ganhou = 0, perdeu = 0;
+  leitores.forEach(l => {
+    if (o.ganha.includes(l.grupo)){ l.conf++; ganhou++; }
+    if (o.perde.includes(l.grupo)){ l.conf--; perdeu++; }
+  });
+  historico.push({ganha:o.ganha});
+  pinta();
+  document.getElementById('cena').innerHTML =
+    '<p class="dia">' + CENAS[turno].dia + '</p>' +
+    '<div class="efeito"><p>' + o.texto + '</p><p class="contas">' +
+    (ganhou ? 'Ganhou ' + ganhou + (ganhou === 1 ? ' leitor: ' : ' leitores: ') + lista(o.ganha) + '. '
+            : 'Não ganhou a confiança de ninguém. ') +
+    (perdeu ? 'Perdeu ' + perdeu + ': ' + lista(o.perde) + '.' : '') +
+    '</p></div><button class="principal larga" id="seguinte">' +
+    (turno === CENAS.length - 1 ? 'Fechar a semana' : 'Dia seguinte') + '</button>';
+  document.getElementById('seguinte').onclick = () => {
+    turno++;
+    if (turno < CENAS.length) cena(); else fimJogo();
+  };
+}
+function fimJogo(){
+  document.getElementById('mesa').classList.add('escondido');
+  const f = document.getElementById('fim-jogo');
+  f.classList.remove('escondido');
+  const confiam = leitores.filter(l => l.conf >= 1).length;
+  const perdidos = leitores.filter(l => l.conf < 0).length;
+  const servidos = {};
+  historico.forEach(h => h.ganha.forEach(g => servidos[g] = (servidos[g] || 0) + 1));
+  const linha = Object.entries(servidos).sort((a, b) => b[1] - a[1])[0];
+  const confPorGrupo = {};
+  leitores.forEach(l => {
+    confPorGrupo[l.grupo] = confPorGrupo[l.grupo] || {n:0, ok:0};
+    confPorGrupo[l.grupo].n++;
+    if (l.conf >= 1) confPorGrupo[l.grupo].ok++;
+  });
+  let barras = '';
+  Object.entries(TAMANHO).sort((a, b) => b[1] - a[1]).forEach(([g, n]) => {
+    const ok = confPorGrupo[g].ok;
+    let q = '';
+    for (let k = 0; k < n; k++) q += '<i' + (k < ok ? '' : ' class="off"') + '></i>';
+    barras += '<div class="grupo-linha"><span>' + g + '</span><span class="mini">' + q +
+      '<span style="color:var(--cinza);font-size:.72rem;margin-left:.4rem">' + ok + ' de ' + n +
+      '</span></span></div>';
+  });
+  f.innerHTML = '<div class="fim">' +
+    '<p class="grande">' + confiam + ' dos 41<br>ainda confiam em si</p>' +
+    '<p>' + (perdidos ? 'Perdeu de vez ' + perdidos + (perdidos === 1 ? ' leitor.' : ' leitores.')
+                      : 'Não perdeu nenhum leitor de vez.') + '</p>' +
+    (linha ? '<p>Ao longo da semana, o jornal que fez serviu sobretudo quem queria <b>' +
+             linha[0].toLowerCase() + '</b>.</p>' : '') +
+    '<p class="sub" style="margin:1.4rem 0 0">Os sete grupos de leitores, pelo tamanho real. A cheio, os que ainda confiam em si</p>' +
+    '<div class="grupos">' + barras + '</div>' +
+    '<button class="principal" style="padding:.85rem 1.6rem" id="outra">Jogar outra vez</button></div>';
+  document.getElementById('outra').onclick = () => {
+    leitores.forEach(l => l.conf = 0);
+    turno = 0;
+    historico.length = 0;
+    f.classList.add('escondido');
+    f.innerHTML = '';
+    document.getElementById('mesa').classList.remove('escondido');
+    pinta();
+    cena();
+    document.getElementById('jogo').scrollIntoView({block:'start'});
+  };
+}
+document.getElementById('comecar').onclick = () => {
+  document.getElementById('intro-jogo').classList.add('escondido');
+  document.getElementById('mesa').classList.remove('escondido');
+  pinta();
+  cena();
+};
+})();
+</script>
+<script>
+(function(){
+  var docEl=document.documentElement, btn=document.querySelector('.tema');
+  function s(){ btn.setAttribute('aria-label', docEl.getAttribute('data-tema')==='escuro' ? 'Mudar para tema claro' : 'Mudar para tema escuro'); }
+  s();
+  btn.addEventListener('click', function(){
+    var n = docEl.getAttribute('data-tema')==='escuro' ? 'claro' : 'escuro';
+    docEl.setAttribute('data-tema', n);
+    try{ localStorage.setItem('tema-esv', n); }catch(e){}
+    s();
+  });
+})();
+</script>
+</body>
+</html>
